@@ -23,15 +23,14 @@ local cmp_mappings = lsp.defaults.cmp_mappings({
 lsp.setup_nvim_cmp({
     mapping = cmp_mappings
 })
-
+lsp.set_sign_icons({
+    error = '✘',
+    warn = '▲',
+    hint = '⚑',
+    info = '»'
+})
 lsp.set_preferences({
     suggest_lsp_servers = false,
-    sign_icons = {
-        error = '✘',
-        warn = '▲',
-        hint = '⚑',
-        info = '»'
-    }
 })
 
 lsp.on_attach(function(client, bufnr)
@@ -51,24 +50,27 @@ lsp.on_attach(function(client, bufnr)
                 name = "[r]efactor",
                 r = { function() vim.lsp.buf.rename() end, "[r]ename" }
             },
-            a = {
-                function()
-                    vim.lsp.buf.code_action()
-                end,
-                "code [a]ction",
-            },
-            d = {
-                function()
-                    local float = vim.diagnostic.config().float
+            l = {
+                name = "[l]ist",
+                a = {
+                    function()
+                        vim.lsp.buf.code_action()
+                    end,
+                    "code [a]ction",
+                },
+                d = {
+                    function()
+                        local float = vim.diagnostic.config().float
 
-                    if float then
-                        local config = type(float) == "table" and float or {}
-                        config.scope = "line"
+                        if float then
+                            local config = type(float) == "table" and float or {}
+                            config.scope = "line"
 
-                        vim.diagnostic.open_float(config)
-                    end
-                end,
-                "Show line [d]iagnostics",
+                            vim.diagnostic.open_float(config)
+                        end
+                    end,
+                    "line [d]iagnostics",
+                }
             }
         }
     }, opts)
