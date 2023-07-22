@@ -56,6 +56,9 @@ require("lazy").setup({
         event = "InsertEnter",
         opts = {} -- this is equalent to setup({}) function
     },
+    { 'RRethy/vim-illuminate' },
+    { 'petertriho/nvim-scrollbar' },
+    { 'nvim-lualine/lualine.nvim' },
     {
         "catppuccin/nvim",
         name = "catppuccin",
@@ -64,7 +67,6 @@ require("lazy").setup({
             vim.cmd.colorscheme 'catppuccin-mocha'
         end,
     },
-    { 'RRethy/vim-illuminate' },
     -- {
     -- 	-- Theme inspired by Atom
     -- 	'navarasu/onedark.nvim',
