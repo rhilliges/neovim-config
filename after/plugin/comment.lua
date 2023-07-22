@@ -22,12 +22,12 @@ wk.register({
 	f = {
 		name = "[f]ormat",
 
-		["/"] = { "<Plug>(comment_toggle_linewise_current)", "Comment toggle current line" }
+		["/"] = { "<Plug>(comment_toggle_linewise_current)", "comment toggle current line" }
 	},
 }, opts)
 
 wk.register({
 	f = {
-		["/"] = { "<Plug>(comment_toggle_linewise_visual)", "Comment toggle current line" }
+		["/"] = { "<Plug>(comment_toggle_linewise_visual)", "comment toggle current line" }
 	}
 }, vopts)
