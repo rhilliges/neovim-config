@@ -2,19 +2,22 @@ local wk = require "which-key"
 
 wk.register({
     ["<leader>"] = {
-        w = { ":w<cr>", "Save File" },
+        w = { ":w<cr>", "save file" },
         c = {
-            name = "Close",
-            c = { ":q<cr>", "Close Editor" },
-            s = { ":xa<cr>", "Save all and close" },
-            f = { ":q!<cr>", "Force Close Editor" }
+            name = "[c]lose",
+            c = { ":q<cr>", "close editor" },
+            s = { ":xa<cr>", "save all and close" },
+            f = { ":q!<cr>", "force close editor" }
         },
-        y = { '"+y', "Copy to clipboard"},
-        p = { '"+p', "Paste from clipboard"}
+        y = { '"+y', "copy to clipboard" },
+        p = { '"+p', "paste from clipboard" },
+        o = {
+            e = { ':Ex<cr>', 'open explorer' }
+        }
     }
 })
 wk.register({
-    y = { '"+y', "Copy to clipboard"},
-    p = { '"+p', "Paste from clipboard"}
+    y = { '"+y', "copy to clipboard" },
+    p = { '"+p', "paste from clipboard" }
 
-}, { prefix = '<leader>', mode = 'v'})
+}, { prefix = '<leader>', mode = 'v' })
