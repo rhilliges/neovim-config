@@ -59,6 +59,7 @@ require("lazy").setup({
     { 'RRethy/vim-illuminate' },
     { 'petertriho/nvim-scrollbar' },
     { 'nvim-lualine/lualine.nvim' },
+    -- { 'ahmedkhalf/project.nvim' },
     {
         "catppuccin/nvim",
         name = "catppuccin",
