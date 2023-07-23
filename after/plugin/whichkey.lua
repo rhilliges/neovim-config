@@ -9,8 +9,8 @@ wk.register({
             s = { ":xa<cr>", "save all and close" },
             f = { ":q!<cr>", "force close editor" }
         },
-        y = { '"+y', "copy to clipboard" },
-        p = { '"+p', "paste from clipboard" },
+        -- y = { '"+y', "copy to clipboard" },
+        -- p = { '"+p', "paste from clipboard" },
         o = {
             e = { ':Ex<cr>', 'open explorer' }
         }
