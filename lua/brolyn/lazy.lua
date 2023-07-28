@@ -49,6 +49,21 @@ require("lazy").setup({
             { 'L3MON4D3/LuaSnip' },     -- Required
         },
     },
+    {
+        'folke/trouble.nvim',
+        dependencies = { "nvim-tree/nvim-web-devicons" },
+        opts = {
+            position = 'right',
+            signs = {
+                error = '✘',
+                warning = '▲',
+                hint = '⚑',
+                information = '»'
+            } -- your configuration comes here
+            -- or leave it empty to use the default settings
+            -- refer to the configuration section below
+        },
+    },
     { "rcarriga/nvim-dap-ui", dependencies = { "mfussenegger/nvim-dap" } },
     { 'ThePrimeagen/harpoon' },
     {
