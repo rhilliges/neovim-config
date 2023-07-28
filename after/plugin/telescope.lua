@@ -29,7 +29,7 @@ wk.register({
                 "[r]eferences"
             },
             b = { function()
-                builtin.lsp_references()
+                builtin.git_branches()
             end,
                 "[b]ranches"
             },
