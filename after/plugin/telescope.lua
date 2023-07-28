@@ -35,5 +35,11 @@ wk.register({
             },
             s = { "<cmd>Telescope lsp_document_symbols<cr>", "[s]ymbols" },
         },
+        g = {
+            name = "[g]oto",
+            d = { function() builtin.lsp_definitions() end, "[d]efinition" },
+            D = { function() builtin.lsp_type_definitions() end, "[D]eclaration" },
+            i = { function() builtin.lsp_implementations() end, "[i]mplementations" },
+        },
     }
 })

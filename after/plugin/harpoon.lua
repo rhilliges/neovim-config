@@ -46,7 +46,7 @@ wk.register({
             function()
                 hu.nav_file(5)
             end,
-            'fifth buffer' 
+            'fifth buffer'
         },
     }
 })

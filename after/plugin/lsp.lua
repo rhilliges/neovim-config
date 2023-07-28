@@ -19,7 +19,6 @@ local cmp_mappings = lsp.defaults.cmp_mappings({
 })
 -- cmp_mappings['<Tab>'] = nil
 -- cmp_mappings['<S-Tab>'] = nil
-
 lsp.setup_nvim_cmp({
     mapping = cmp_mappings
 })
@@ -37,12 +36,12 @@ lsp.on_attach(function(client, bufnr)
     local opts = { buffer = bufnr, remap = false }
     wk.register({
         ["<leader>"] = {
-            g = {
-                name = "[g]oto",
-                d = { function() vim.lsp.buf.definition() end, "[d]efinition" },
-                D = { function() vim.lsp.buf.declaration() end, "[D]eclaration" },
-                i = { function() vim.lsp.buf.implementation() end, "[i]mplementation" },
-            },
+            -- g = {
+            --     name = "[g]oto",
+            --     d = { function() vim.lsp.buf.definition() end, "[d]efinition" },
+            --     D = { function() vim.lsp.buf.declaration() end, "[D]eclaration" },
+            --     i = { function() vim.lsp.buf.implementation() end, "[i]mplementation" },
+            -- },
             f = {
                 f = { "<cmd> LspZeroFormat<cr>", "[f]ile" },
             },
