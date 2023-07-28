@@ -1,10 +1,11 @@
 local wk = require 'which-key'
-
 local h = require("harpoon")
 local hm = require 'harpoon.mark'
 local hu = require 'harpoon.ui'
 h.setup({
     tabline = true,
+    tabline_prefix = "|  ",
+    tabline_suffix = "   ",
 })
 
 wk.register({
@@ -40,6 +41,12 @@ wk.register({
                 hu.nav_file(4)
             end,
             'fourth buffer'
+        },
+        ['5'] = {
+            function()
+                hu.nav_file(5)
+            end,
+            'fifth buffer' 
         },
     }
 })

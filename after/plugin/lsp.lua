@@ -80,7 +80,7 @@ lsp.on_attach(function(client, bufnr)
     --  vim.diagnostic.goto_next()
     --  vim.diagnostic.goto_prev()
     --  vim.lsp.buf.code_action()
-    --  vim.lsp.buf.references()
+    --  vim.lsp.buf.references() --> telescope
     --  vim.lsp.buf.signature_help()
 end)
 
