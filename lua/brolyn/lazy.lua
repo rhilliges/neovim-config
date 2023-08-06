@@ -65,6 +65,7 @@ require("lazy").setup({
         },
     },
     { "rcarriga/nvim-dap-ui", dependencies = { "mfussenegger/nvim-dap" } },
+    { 'akinsho/toggleterm.nvim', version = "*", config = true },
     { 'ThePrimeagen/harpoon' },
     {
         'windwp/nvim-autopairs',
