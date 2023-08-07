@@ -1,4 +1,6 @@
 local builtin = require('telescope.builtin')
+local telescope = require('telescope')
+
 local wk = require "which-key"
 wk.register({
     ["<leader>"] = {
@@ -20,6 +22,7 @@ wk.register({
                 "[f]ile"
             },
             r = { "<cmd>Telescope oldfiles<cr>", "[r]ecent file" },
+            e = { ':Telescope file_browser<cr>', '[e]xplorer' }
         },
         l = {
             name = "[l]ist",
@@ -43,3 +46,16 @@ wk.register({
         },
     }
 })
+
+telescope.setup(
+    -- {
+    --     extensions = {
+    --         file_browser = {
+    --             hijack_netrw = true
+    --         }
+    --     }
+    -- }
+)
+
+telescope.load_extension("ui-select")
+telescope.load_extension("file_browser")

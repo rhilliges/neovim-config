@@ -4,8 +4,8 @@ local hm = require 'harpoon.mark'
 local hu = require 'harpoon.ui'
 h.setup({
     tabline = true,
-    tabline_prefix = "|  ",
-    tabline_suffix = "   ",
+    tabline_prefix = "   ",
+    tabline_suffix = "  |",
 })
 
 wk.register({
