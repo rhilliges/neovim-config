@@ -19,11 +19,12 @@ require("lazy").setup({
 		dependencies = { 'nvim-lua/plenary.nvim' }
 	},
 	{ 'nvim-telescope/telescope-ui-select.nvim' },
-    { 'akinsho/toggleterm.nvim', version = "*", config = true },
 	{
 		"nvim-telescope/telescope-file-browser.nvim",
 		dependencies = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" }
 	},
+	{ 'akinsho/toggleterm.nvim',                version = "*", config = true },
+	{ 'tpope/vim-fugitive' },
 	----------------------------------------------------------------------- code parsing
 	{
 		'nvim-treesitter/nvim-treesitter',
@@ -41,24 +42,20 @@ require("lazy").setup({
 		'VonHeikemen/lsp-zero.nvim',
 		branch = 'v2.x',
 		dependencies = {
-			-- LSP Support
-			{ 'neovim/nvim-lspconfig' }, -- Required
-			{                   -- Optional
+			{ 'neovim/nvim-lspconfig' },
+			{
 				'williamboman/mason.nvim',
 				build = function()
 					pcall(vim.cmd, 'MasonUpdate')
 				end,
 			},
-			{ 'williamboman/mason-lspconfig.nvim' }, -- Optional
-
-			-- Autocompletion
+			{ 'williamboman/mason-lspconfig.nvim' },
 		},
 	},
-	{ 'hrsh7th/nvim-cmp' }, -- Required
-	{ 'hrsh7th/cmp-nvim-lsp' }, -- Required
-	{ 'L3MON4D3/LuaSnip' }, -- Required
+	{ 'hrsh7th/nvim-cmp' },
+	{ 'hrsh7th/cmp-nvim-lsp' },
+	{ 'L3MON4D3/LuaSnip' },
 	{ "saadparwaiz1/cmp_luasnip" },
-	{ "mfussenegger/nvim-jdtls" },
 	{
 		'folke/trouble.nvim',
 		dependencies = { "nvim-tree/nvim-web-devicons" },
@@ -69,40 +66,32 @@ require("lazy").setup({
 				warning = '▲',
 				hint = '⚑',
 				information = '»'
-			} -- your configuration comes here
-			-- or leave it empty to use the default settings
-			-- refer to the configuration section below
+			}
 		},
 	},
+	{ "mfussenegger/nvim-jdtls" },
 	----------------------------------------------------------------------- debugging
 	{ "rcarriga/nvim-dap-ui", dependencies = { "mfussenegger/nvim-dap" } },
-	----------------------------------------------------------------------- file pinning
+	----------------------------------------------------------------------- file handling
 	{ 'ThePrimeagen/harpoon' },
+	{
+		"nvim-tree/nvim-tree.lua",
+		version = "*",
+		lazy = false,
+		dependencies = {
+			"nvim-tree/nvim-web-devicons",
+		},
+	},
 	----------------------------------------------------------------------- user interface
 	{
 		'windwp/nvim-autopairs',
 		event = "InsertEnter",
 		opts = {} -- this is equalent to setup({}) function
 	},
+	{ 'windwp/nvim-ts-autotag' },
 	{ 'RRethy/vim-illuminate' },
 	{ 'petertriho/nvim-scrollbar' },
 	{ 'nvim-lualine/lualine.nvim' },
-	{
-		"catppuccin/nvim",
-		name = "catppuccin",
-		priority = 1000,
-		config = function()
-			vim.cmd.colorscheme 'catppuccin-mocha'
-		end,
-	},
-	-- {
-	-- 	-- Theme inspired by Atom
-	-- 	'navarasu/onedark.nvim',
-	-- 	priority = 1000,
-	-- 	config = function()
-	-- 		vim.cmd.colorscheme 'onedark'
-	-- 	end,
-	-- },
 	{
 		"folke/which-key.nvim",
 		event = "VeryLazy",
@@ -110,11 +99,15 @@ require("lazy").setup({
 			vim.o.timeout = true
 			vim.o.timeoutlen = 300
 		end,
-		opts = {
-			-- your configuration comes here
-			-- or leave it empty to use the default settings
-			-- refer to the configuration section below
-		}
-	}
-
+		opts = {}
+	},
+	----------------------------------------------------------------------- color theme
+	{
+		"catppuccin/nvim",
+		name = "catppuccin",
+		priority = 1000,
+		config = function()
+			vim.cmd.colorscheme 'catppuccin'
+		end,
+	},
 })

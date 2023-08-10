@@ -5,12 +5,17 @@ local wk = require "which-key"
 local tc = require('telescope.builtin')
 
 lsp.preset({})
-lsp.nvim_workspace()
 lsp.skip_server_setup({ 'jdtls' })
 
--- lsp.setup_nvim_cmp({
---     mapping = cmp_mappings
--- })
+lsp.setup_servers({
+	'tsserver',
+	'eslint',
+	'angularls',
+	'lua_ls',
+	'html'
+})
+lsp.nvim_workspace()
+
 lsp.set_sign_icons({
 	error = '✘',
 	warn = '▲',
@@ -80,14 +85,6 @@ end)
 
 lsp.setup()
 
--- Fix Undefined global 'vim'
--- local cmp_select = { behavior = cmp.SelectBehavior.Select }
--- local cmp_mappings = lsp.defaults.cmp_mappings({
--- 	-- ['<CR>'] = cmp.mapping.confirm({ select = false })
--- })
--- cmp_mappings['<Tab>'] = nil
--- cmp_mappings['<S-Tab>'] = nil
--- You need to setup `cmp` after lsp-zero
 local cmp_action = lsp.cmp_action()
 cmp.setup({
 	-- max_item_count = 10,
@@ -104,23 +101,17 @@ cmp.setup({
 		['<C-b>'] = cmp_action.luasnip_jump_backward(),
 	},
 	snippet = {
-		-- REQUIRED - you must specify a snippet engine
 		expand = function(args)
-			print("calling luasnipt")
-			-- vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
-			require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
-			-- require('snippy').expand_snippet(args.body) -- For `snippy` users.
-			-- vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
+			require('luasnip').lsp_expand(args.body)
 		end,
 	},
 	sources = cmp.config.sources({
 		{ name = 'nvim_lsp' },
-		{ name = 'luasnip' }, -- For luasnip users.
+		{ name = 'luasnip' },
 	}, {
 		{ name = 'buffer' },
 	}),
 	-- formatting = {
-	-- 	-- Youtube: How to set up nice formatting for your sources.
 	-- 	format = lspkind.cmp_format {
 	-- 		with_text = true,
 	-- 		menu = {
