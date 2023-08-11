@@ -13,8 +13,8 @@ wk.register({
         -- p = { '"+p', "paste from clipboard" },
     }
 })
-wk.register({
-    y = { '"+y', "copy to clipboard" },
-    p = { '"+p', "paste from clipboard" }
-
-}, { prefix = '<leader>', mode = 'v' })
+-- wk.register({
+--     y = { '"+y', "copy to clipboard" },
+--     p = { '"+p', "paste from clipboard" }
+--
+-- }, { prefix = '<leader>', mode = 'v' })

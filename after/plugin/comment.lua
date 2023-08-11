@@ -28,6 +28,6 @@ wk.register({
 wk.register({
 	f = {
 		name = "[f]ormat",
-		["/"] = { "<Plug>(comment_toggle_linewise_visual)", "comment toggle current line" }
+		["/"] = { "<Plug>(comment_toggle_linewise_visual)", "comment current selection" }
 	}
 }, vopts)
