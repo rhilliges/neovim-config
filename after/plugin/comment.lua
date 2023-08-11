@@ -21,13 +21,13 @@ local vopts = {
 wk.register({
 	f = {
 		name = "[f]ormat",
-
 		["/"] = { "<Plug>(comment_toggle_linewise_current)", "comment toggle current line" }
 	},
 }, opts)
 
 wk.register({
 	f = {
-		["/"] = { "<Plug>(comment_toggle_linewise_visual)", "comment toggle current line" }
+		name = "[f]ormat",
+		["/"] = { "<Plug>(comment_toggle_linewise_visual)", "comment current selection" }
 	}
 }, vopts)

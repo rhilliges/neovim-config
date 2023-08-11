@@ -11,13 +11,13 @@ wk.register({
         },
         -- y = { '"+y', "copy to clipboard" },
         -- p = { '"+p', "paste from clipboard" },
-        o = {
-            e = { ':Ex<cr>', '[e]xplorer' }
-        }
+        -- o = {
+        --     e = { ':Ex<cr>', '[e]xplorer' }
+        -- }
     }
 })
-wk.register({
-    y = { '"+y', "copy to clipboard" },
-    p = { '"+p', "paste from clipboard" }
-
-}, { prefix = '<leader>', mode = 'v' })
+-- wk.register({
+--     y = { '"+y', "copy to clipboard" },
+--     p = { '"+p', "paste from clipboard" }
+--
+-- }, { prefix = '<leader>', mode = 'v' })
