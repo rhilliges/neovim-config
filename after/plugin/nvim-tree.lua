@@ -2,8 +2,8 @@ local nvim_tree = require('nvim-tree')
 local wk = require "which-key"
 local gwidth = vim.api.nvim_list_uis()[1].width
 local gheight = vim.api.nvim_list_uis()[1].height
-local width = 60
-local height = 20
+local width = 100
+local height = 40
 
 nvim_tree.setup {
     disable_netrw = false,
