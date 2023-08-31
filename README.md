@@ -24,9 +24,9 @@ Rule 3: Remaps only if default vim behavior interrupts workflow
 Everyting starts with \<leader>:
 
 
-| e[x]ecute/[d]ebug | [r]efactor | [g]oto | [s]earch | [o]pen | [f]ormat | [l]ist | [c]lose |
-| ----------------- | ---------- | ------ | -------- | ------ | -------- | ------ | ------- |
-
+| e[x]ecute/[d]ebug | [r]efactor | [g]oto | [s]earch | [o]pen | [f]ormat | [l]ist | [c]lose | [p]in |
+| ----------------- | ---------- | ------ | -------- | ------ | -------- | ------ | ------- | ----- |
+| [t]est method     | extract variable | [d]efinition | [t]ext | / -> comment toggle current line | [r]eferences | [b]uffer | [f]ile |
 
 Examples:
 format file -> \<leader>ff
