@@ -25,6 +25,7 @@ require("lazy").setup({
 	},
 	{ 'akinsho/toggleterm.nvim',                version = "*", config = true },
 	{ 'tpope/vim-fugitive' },
+	{ 'f-person/git-blame.nvim' },
 	----------------------------------------------------------------------- code parsing
 	{
 		'nvim-treesitter/nvim-treesitter',
@@ -71,7 +72,7 @@ require("lazy").setup({
 	},
 	{ "mfussenegger/nvim-jdtls" },
 	----------------------------------------------------------------------- debugging
-	{ "rcarriga/nvim-dap-ui", dependencies = { "mfussenegger/nvim-dap" } },
+	{ "rcarriga/nvim-dap-ui",   dependencies = { "mfussenegger/nvim-dap" } },
 	----------------------------------------------------------------------- file handling
 	{ 'ThePrimeagen/harpoon' },
 	{
