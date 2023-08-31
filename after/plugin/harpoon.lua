@@ -48,6 +48,12 @@ wk.register({
             end,
             'fifth buffer'
         },
+        ['6'] = {
+            function()
+                hu.nav_file(6)
+            end,
+            'sixth buffer'
+        },
     }
 })
 
