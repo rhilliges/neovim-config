@@ -3,9 +3,9 @@ local dapui = require("dapui")
 local wk = require "which-key"
 
 dapui.setup()
-dap.listeners.after.event_initialized["dapui_config"] = function()
-    dapui.open()
-end
+-- dap.listeners.after.event_initialized["dapui_config"] = function()
+--     dapui.open()
+-- end
 -- dap.listeners.after.event_exited["dapui_config"] = function()
 --     dapui.close()
 -- end
@@ -21,7 +21,13 @@ wk.register({
                     dap.toggle_breakpoint()
                 end,
                 "toggle [b]reakpoint"
-            }
+            },
+			u = {
+				function ()
+					dapui.toggle()
+				end,
+				"toggle [u]i"
+			}
         }
     },
     ['<F5>'] = {
@@ -40,12 +46,12 @@ wk.register({
         function()
             dap.step_into()
         end,
-        "step over"
+        "step into"
     },
     ['<F8>'] = {
         function()
             dap.step_out()
         end,
-        "step over"
+        "step out"
     }
 })
