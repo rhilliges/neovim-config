@@ -3,6 +3,7 @@ local h = require("harpoon")
 local hm = require 'harpoon.mark'
 local hu = require 'harpoon.ui'
 h.setup({
+	auto_shift_indices = true,
     tabline = true,
     tabline_prefix = "   ",
     tabline_suffix = "  |",

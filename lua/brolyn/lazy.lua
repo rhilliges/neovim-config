@@ -51,12 +51,12 @@ require("lazy").setup({
 				end,
 			},
 			{ 'williamboman/mason-lspconfig.nvim' },
+			-- { "saadparwaiz1/cmp_luasnip" },
+			{ 'hrsh7th/nvim-cmp' },
+			{ 'hrsh7th/cmp-nvim-lsp' },
+			{ 'L3MON4D3/LuaSnip' },
 		},
 	},
-	{ 'hrsh7th/nvim-cmp' },
-	{ 'hrsh7th/cmp-nvim-lsp' },
-	{ 'L3MON4D3/LuaSnip' },
-	{ "saadparwaiz1/cmp_luasnip" },
 	{
 		'folke/trouble.nvim',
 		dependencies = { "nvim-tree/nvim-web-devicons" },
@@ -74,7 +74,10 @@ require("lazy").setup({
 	----------------------------------------------------------------------- debugging
 	{ "rcarriga/nvim-dap-ui",   dependencies = { "mfussenegger/nvim-dap" } },
 	----------------------------------------------------------------------- file handling
-	{ 'ThePrimeagen/harpoon' },
+	{
+		'rhilliges/harpoon',
+		branch = "feature/auto-shift-indices"
+	},
 	{
 		"nvim-tree/nvim-tree.lua",
 		version = "*",
@@ -107,8 +110,8 @@ require("lazy").setup({
 		"catppuccin/nvim",
 		name = "catppuccin",
 		priority = 1000,
-		config = function()
-			vim.cmd.colorscheme 'catppuccin'
-		end,
+		-- config = function()
+		-- 	vim.cmd.colorscheme 'catppuccin'
+		-- end,
 	},
 })
