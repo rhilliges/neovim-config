@@ -22,7 +22,6 @@ wk.register({
                 "[f]ile"
             },
             r = { "<cmd>Telescope oldfiles<cr>", "[r]ecent file" },
-            e = { ':Telescope file_browser<cr>', '[e]xplorer' }
         },
         l = {
             name = "[l]ist",
