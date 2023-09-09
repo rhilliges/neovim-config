@@ -1,10 +1,13 @@
 local lsp = require "lsp-zero"
 local cmp = require('cmp')
-local lspc = require 'lspconfig'
+-- local lspc = require 'lspconfig'
 local wk = require "which-key"
 local tc = require('telescope.builtin')
 
-lsp.preset({})
+lsp.preset({
+	name = 'minimal',
+	manage_nvim_cmp = false,
+})
 lsp.skip_server_setup({ 'jdtls' })
 
 lsp.setup_servers({
@@ -90,6 +93,8 @@ cmp.setup({
 	-- max_item_count = 10,
 	mapping = {
 		-- `Enter` key to confirm completion
+		['<C-u>'] = cmp.mapping.scroll_docs(-4),
+		['<C-d>'] = cmp.mapping.scroll_docs(4),
 		['<CR>'] = cmp.mapping.confirm({ select = false }),
 		['<C-p>'] = cmp.mapping.select_prev_item(),
 		['<C-n>'] = cmp.mapping.select_next_item(),
