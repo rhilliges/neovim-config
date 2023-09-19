@@ -1,10 +1,15 @@
 local lsp = require "lsp-zero"
 local cmp = require('cmp')
-local lspc = require 'lspconfig'
+-- local lspc = require 'lspconfig'
 local wk = require "which-key"
 local tc = require('telescope.builtin')
 
-lsp.preset({})
+lsp.preset({
+	name = 'minimal',
+	manage_nvim_cmp = false,
+})
+lsp.skip_server_setup({ 'jdtls' })
+
 lsp.setup_servers({
 	'tsserver',
 	'eslint',
@@ -34,12 +39,6 @@ lsp.on_attach(function(client, bufnr)
 				D = { function() tc.lsp_type_definitions() end, "[D]eclaration" },
 				i = { function() tc.lsp_implementations() end, "[i]mplementations" },
 			},
-			-- g = {
-			--     name = "[g]oto",
-			--     d = { function() vim.lsp.buf.definition() end, "[d]efinition" },
-			--     D = { function() vim.lsp.buf.declaration() end, "[D]eclaration" },
-			--     i = { function() vim.lsp.buf.implementation() end, "[i]mplementation" },
-			-- },
 			f = {
 				f = { function() vim.lsp.buf.format() end, "[f]ile" },
 			},
@@ -58,26 +57,36 @@ lsp.on_attach(function(client, bufnr)
 				d = {
 					function()
 						local float = vim.diagnostic.config().float
-
 						if float then
 							local config = type(float) == "table" and float or {}
 							config.scope = "line"
-
 							vim.diagnostic.open_float(config)
 						end
 					end,
 					"line [d]iagnostics",
-				}
+				},
+				s = {
+					function()
+						tc.lsp_document_symbols({ layout_strategy = 'vertical', layout_config = { width = 0.5 } })
+					end,
+					"[s]ymbols"
+				},
+				r = {
+					function()
+						tc.lsp_references()
+					end,
+					"[r]eferences"
+				},
 			}
 		}
 	}, opts)
 	--  vim.lsp.buf.hover()
-	--  vim.lsp.buf.workspace_symbol() -> telescope
+	--  vim.lsp.buf.workspace_symbol()
 	--  vim.diagnostic.open_float()
 	--  vim.diagnostic.goto_next()
 	--  vim.diagnostic.goto_prev()
 	--  vim.lsp.buf.code_action()
-	--  vim.lsp.buf.references() --> telescope
+	--  vim.lsp.buf.references()
 	--  vim.lsp.buf.signature_help()
 end)
 
@@ -88,6 +97,8 @@ cmp.setup({
 	-- max_item_count = 10,
 	mapping = {
 		-- `Enter` key to confirm completion
+		['<C-u>'] = cmp.mapping.scroll_docs(-4),
+		['<C-d>'] = cmp.mapping.scroll_docs(4),
 		['<CR>'] = cmp.mapping.confirm({ select = false }),
 		['<C-p>'] = cmp.mapping.select_prev_item(),
 		['<C-n>'] = cmp.mapping.select_next_item(),
