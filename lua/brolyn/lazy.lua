@@ -24,7 +24,6 @@ require("lazy").setup({
 		dependencies = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" }
 	},
 	{ 'akinsho/toggleterm.nvim',                version = "*", config = true },
-	{ 'tpope/vim-fugitive' },
 	{ 'f-person/git-blame.nvim' },
 	----------------------------------------------------------------------- code parsing
 	{
@@ -38,6 +37,7 @@ require("lazy").setup({
 			}
 		}
 	},
+	{ 'nvim-treesitter/nvim-treesitter-context' },
 	----------------------------------------------------------------------- lsp
 	{
 		'VonHeikemen/lsp-zero.nvim',
