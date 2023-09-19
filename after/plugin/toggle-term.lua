@@ -18,4 +18,3 @@ wk.register({
 		v = { _lazygit_toggle, "[v]cs" }
 	}
 })
--- vim.api.nvim_set_keymap("n", "<leader>t", "<cmd>lua _lazygit_toggle()<CR>", {noremap = true, silent = true})

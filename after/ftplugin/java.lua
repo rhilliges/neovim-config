@@ -159,7 +159,11 @@ local mappings = {
 		t = { "<Cmd>lua require'jdtls.tests'.goto_subjects()<CR>", "[t]est" },
 	},
 	d = {
-		t = { "<Cmd>lua require'jdtls'.test_nearest_method()<CR>", "[t]est method" },
+		t = { function()
+			-- vim.notify('Started debugging session')
+			require 'jdtls'.test_nearest_method()
+		end,
+			"[t]est method" },
 		T = { "<Cmd>lua require'jdtls'.test_class()<CR>", "[T]est class" },
 
 	},
