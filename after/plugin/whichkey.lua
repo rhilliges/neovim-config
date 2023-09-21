@@ -6,7 +6,6 @@ wk.register({
         c = {
             name = "[c]lose",
             b = { ":q<cr>", "[b]uffer" },
-            a = { ":xa<cr>", "save [a]ll and close" },
             f = { ":q!<cr>", "[f]orce close editor" }
         },
         -- y = { '"+y', "copy to clipboard" },
