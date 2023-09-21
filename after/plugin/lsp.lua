@@ -32,6 +32,12 @@ lsp.set_preferences({
 lsp.on_attach(function(client, bufnr)
 	local opts = { buffer = bufnr, remap = false }
 	wk.register({
+		[']'] = {
+			d = { function() vim.diagnostic.goto_next() end, "Next [d]iagnostic" },
+		},
+		['['] = {
+			d = { function() vim.diagnostic.goto_prev() end, "Previous [d]iagnostic" },
+		},
 		["<leader>"] = {
 			g = {
 				name = "[g]oto",
@@ -83,8 +89,6 @@ lsp.on_attach(function(client, bufnr)
 	--  vim.lsp.buf.hover()
 	--  vim.lsp.buf.workspace_symbol()
 	--  vim.diagnostic.open_float()
-	--  vim.diagnostic.goto_next()
-	--  vim.diagnostic.goto_prev()
 	--  vim.lsp.buf.code_action()
 	--  vim.lsp.buf.references()
 	--  vim.lsp.buf.signature_help()
