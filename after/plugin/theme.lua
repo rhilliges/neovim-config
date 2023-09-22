@@ -1,15 +1,17 @@
-require("catppuccin").setup({
-	transparent_background = true,
-	integrations = {
-		cmp = true,
-		treesitter = true,
-		harpoon = true,
-		nvimtree = true,
-		which_key = true,
-	}
+-- require("catppuccin").setup({
+-- 	transparent_background = true,
+-- 	integrations = {
+-- 		cmp = true,
+-- 		treesitter = true,
+-- 		harpoon = true,
+-- 		nvimtree = true,
+-- 		which_key = true,
+-- 	}
+-- })
+require'dracula'.setup({
+	transparent_bg = true
 })
-
-vim.cmd.colorscheme "catppuccin-mocha"
+vim.cmd.colorscheme "dracula"
 vim.cmd('highlight! HarpoonActive guibg=NONE guifg=#cdd6f4')
 vim.cmd('highlight! HarpoonNumberInactive guibg=NONE guifg=#b4befe')
 vim.cmd('highlight! HarpoonNumberActive guibg=NONE guifg=#cba6f7')
