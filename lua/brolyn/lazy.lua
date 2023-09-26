@@ -57,6 +57,7 @@ require("lazy").setup({
 			{ 'L3MON4D3/LuaSnip' },
 		},
 	},
+	{ 'dnlhc/glance.nvim' },
 	{
 		'folke/trouble.nvim',
 		dependencies = { "nvim-tree/nvim-web-devicons" },

@@ -1,8 +1,7 @@
-local lsp = require "lsp-zero"
-local cmp = require('cmp')
--- local lspc = require 'lspconfig'
-local wk = require "which-key"
-local tc = require('telescope.builtin')
+local lsp = require 'lsp-zero'
+local cmp = require'cmp'
+local wk = require'which-key'
+local tc = require'telescope.builtin'
 
 lsp.preset({
 	name = 'minimal',
@@ -29,6 +28,25 @@ lsp.set_preferences({
 	suggest_lsp_servers = false,
 })
 
+local glance = require('glance')
+local actions = glance.actions
+glance.setup({
+	border = {
+		enable = true, -- Show window borders. Only horizontal borders allowed
+		top_char = '―',
+		bottom_char = '―',
+	},
+	mappings = {
+		list = {
+			['<C-n>'] = actions.next, -- Bring the cursor to the next item in the list
+			['<C-p>'] = actions.previous, -- Bring the cursor to the previous item in the list
+		},
+	},
+	winbar = {
+		enable = false, -- Available strating from nvim-0.8+
+	},
+})
+
 lsp.on_attach(function(client, bufnr)
 	local opts = { buffer = bufnr, remap = false }
 	wk.register({
@@ -43,7 +61,7 @@ lsp.on_attach(function(client, bufnr)
 				name = "[g]oto",
 				d = { function() tc.lsp_definitions() end, "[d]efinition" },
 				D = { function() tc.lsp_type_definitions() end, "[D]eclaration" },
-				i = { function() tc.lsp_implementations() end, "[i]mplementations" },
+				i = { '<CMD>Glance implementations<CR>', "[i]mplementations" },
 			},
 			f = {
 				f = { function() vim.lsp.buf.format() end, "[f]ile" },
@@ -78,9 +96,10 @@ lsp.on_attach(function(client, bufnr)
 					"[s]ymbols"
 				},
 				r = {
-					function()
-						tc.lsp_references()
-					end,
+					-- function()
+					-- 	tc.lsp_references()
+					-- end,
+					'<CMD>Glance references<CR>',
 					"[r]eferences"
 				},
 			}
@@ -139,7 +158,6 @@ cmp.setup({
 	-- 		},
 	-- 	},
 	-- },
-
 	experimental = {
 		native_menu = false,
 		ghost_text = true,
