@@ -1,4 +1,4 @@
-local nvim_tree = require('nvim-tree')
+local nvim_tree = require'nvim-tree'
 local wk = require "which-key"
 local gwidth = vim.api.nvim_list_uis()[1].width
 local gheight = vim.api.nvim_list_uis()[1].height

@@ -25,11 +25,11 @@ wk.register({
 		},
 		l = {
 			name = "[l]ist",
-			r = { function()
-				builtin.lsp_references()
-			end,
-				"[r]eferences"
-			},
+			-- r = { function()
+			-- 	builtin.lsp_references()
+			-- end,
+			-- 	"[r]eferences"
+			-- },
 			b = { function()
 				builtin.git_branches()
 			end,

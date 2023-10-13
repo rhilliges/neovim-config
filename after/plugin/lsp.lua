@@ -1,4 +1,4 @@
-local lsp = require 'lsp-zero'
+local lsp = require'lsp-zero'
 local cmp = require'cmp'
 local wk = require'which-key'
 local tc = require'telescope.builtin'
@@ -101,6 +101,13 @@ lsp.on_attach(function(client, bufnr)
 					-- end,
 					'<CMD>Glance references<CR>',
 					"[r]eferences"
+				},
+				i = {
+					-- function()
+					-- 	tc.lsp_references()
+					-- end,
+					'<CMD>Glance implementations<CR>',
+					"[i]mplementations"
 				},
 			}
 		}
