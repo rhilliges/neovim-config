@@ -63,10 +63,10 @@ local config = {
 			configuration = {
 				updateBuildConfiguration = "interactive",
 				runtimes = {
-					-- {
-					--                  name = "JavaSE-1.8",
-					--                  path = "~/.sdkman/candidates/java/8.0.382-tem",
-					--                },
+					{
+						 name = "JavaSE-1.8",
+						 path = "~/.sdkman/candidates/java/8.0.382-tem",
+					},
 					-- {
 					--   name = "JavaSE-11",
 					--   path = "~/.sdkman/candidates/java/11.0.17-tem",

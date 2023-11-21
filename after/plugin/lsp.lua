@@ -1,22 +1,13 @@
 local lsp = require'lsp-zero'
 local cmp = require'cmp'
-local wk = require'which-key'
-local tc = require'telescope.builtin'
-
-lsp.preset({
-	name = 'minimal',
-	manage_nvim_cmp = false,
-})
-lsp.skip_server_setup({ 'jdtls' })
 
 lsp.setup_servers({
 	'tsserver',
-	'eslint',
-	'angularls',
+	-- 'eslint',
+	-- 'angularls',
 	'lua_ls',
 	'html'
 })
-lsp.nvim_workspace()
 
 lsp.set_sign_icons({
 	error = '✘',
@@ -24,17 +15,14 @@ lsp.set_sign_icons({
 	hint = '⚑',
 	info = '»'
 })
-lsp.set_preferences({
-	suggest_lsp_servers = false,
-})
 
 local glance = require('glance')
 local actions = glance.actions
 glance.setup({
 	border = {
 		enable = true, -- Show window borders. Only horizontal borders allowed
-		top_char = '―',
-		bottom_char = '―',
+		top_char = '=',
+		bottom_char = '=',
 	},
 	mappings = {
 		list = {
@@ -47,7 +35,14 @@ glance.setup({
 	},
 })
 
+local wk = require'which-key'
+local tc = require'telescope.builtin'
 lsp.on_attach(function(client, bufnr)
+
+	if client.server_capabilities.documentSymbolProvider then
+		require('nvim-navic').attach(client, bufnr)
+	end
+
 	local opts = { buffer = bufnr, remap = false }
 	wk.register({
 		[']'] = {
@@ -173,3 +168,4 @@ cmp.setup({
 vim.diagnostic.config({
 	virtual_text = true
 })
+

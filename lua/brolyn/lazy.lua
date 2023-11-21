@@ -40,21 +40,30 @@ require("lazy").setup({
 	{ 'nvim-treesitter/nvim-treesitter-context' },
 	----------------------------------------------------------------------- lsp
 	{
+		'williamboman/mason.nvim',
+		build = function()
+			pcall(vim.cmd, 'MasonUpdate')
+		end,
+	},
+	-- { 'williamboman/mason-lspconfig.nvim' },
+	{
 		'VonHeikemen/lsp-zero.nvim',
-		branch = 'v2.x',
+		branch = 'v3.x',
+		lazy = true,
+		config = false,
+	},
+	-- LSP Support
+	{
+		'neovim/nvim-lspconfig',
 		dependencies = {
-			{ 'neovim/nvim-lspconfig' },
-			{
-				'williamboman/mason.nvim',
-				build = function()
-					pcall(vim.cmd, 'MasonUpdate')
-				end,
-			},
-			{ 'williamboman/mason-lspconfig.nvim' },
-			-- { "saadparwaiz1/cmp_luasnip" },
-			{ 'hrsh7th/nvim-cmp' },
 			{ 'hrsh7th/cmp-nvim-lsp' },
-			{ 'L3MON4D3/LuaSnip' },
+		}
+	},
+	-- Autocompletion
+	{
+		'hrsh7th/nvim-cmp',
+		dependencies = {
+			{ 'L3MON4D3/LuaSnip' }
 		},
 	},
 	{ 'dnlhc/glance.nvim' },
@@ -71,9 +80,10 @@ require("lazy").setup({
 			}
 		},
 	},
-	{ "mfussenegger/nvim-jdtls" },
+	{ 'SmiteshP/nvim-navic' },
+	{ "rhilliges/nvim-jdtls" },
 	----------------------------------------------------------------------- debugging
-	{ "rcarriga/nvim-dap-ui",   dependencies = { "mfussenegger/nvim-dap" } },
+	{ "rcarriga/nvim-dap-ui", dependencies = { "mfussenegger/nvim-dap" } },
 	----------------------------------------------------------------------- file handling
 	{
 		'rhilliges/harpoon',
@@ -107,7 +117,6 @@ require("lazy").setup({
 		opts = {}
 	},
 	----------------------------------------------------------------------- color theme
-	-- { 'Mofiqul/dracula.nvim' },
 	{
 		"catppuccin/nvim",
 		name = "catppuccin",
