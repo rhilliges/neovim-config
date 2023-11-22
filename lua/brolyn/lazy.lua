@@ -39,13 +39,8 @@ require("lazy").setup({
 	},
 	{ 'nvim-treesitter/nvim-treesitter-context' },
 	----------------------------------------------------------------------- lsp
-	{
-		'williamboman/mason.nvim',
-		build = function()
-			pcall(vim.cmd, 'MasonUpdate')
-		end,
-	},
-	-- { 'williamboman/mason-lspconfig.nvim' },
+	{ 'williamboman/mason.nvim' },
+	{ 'williamboman/mason-lspconfig.nvim' },
 	{
 		'VonHeikemen/lsp-zero.nvim',
 		branch = 'v3.x',
@@ -81,7 +76,7 @@ require("lazy").setup({
 		},
 	},
 	{ 'SmiteshP/nvim-navic' },
-	{ "rhilliges/nvim-jdtls" },
+	{ "mfussenegger/nvim-jdtls" },
 	----------------------------------------------------------------------- debugging
 	{ "rcarriga/nvim-dap-ui", dependencies = { "mfussenegger/nvim-dap" } },
 	----------------------------------------------------------------------- file handling
@@ -122,4 +117,13 @@ require("lazy").setup({
 		name = "catppuccin",
 		priority = 1000,
 	},
+})
+require("mason").setup({
+    ui = {
+        icons = {
+            package_installed = "✓",
+            package_pending = "➜",
+            package_uninstalled = "✗"
+        }
+    }
 })

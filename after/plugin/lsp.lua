@@ -3,8 +3,6 @@ local cmp = require'cmp'
 
 lsp.setup_servers({
 	'tsserver',
-	-- 'eslint',
-	-- 'angularls',
 	'lua_ls',
 	'html'
 })
@@ -114,8 +112,6 @@ lsp.on_attach(function(client, bufnr)
 	--  vim.lsp.buf.references()
 	--  vim.lsp.buf.signature_help()
 end)
-
-lsp.setup()
 
 local cmp_action = lsp.cmp_action()
 cmp.setup({
