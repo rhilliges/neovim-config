@@ -23,7 +23,6 @@ vim.list_extend(
 	)
 )
 
--- print(vim.inspect(bundles))
 -- vim.list_extend(
 --     bundles,
 -- 	'com.microsoft.java.test.runner-jar-with-dependencies.jar'
@@ -38,19 +37,14 @@ local config = {
 		"-Declipse.product=org.eclipse.jdt.ls.core.product",
 		"-Dlog.protocol=true",
 		"-Dlog.level=ALL",
-		"-Xms1g",
+		"-Xms6000m",
 		"--add-modules=ALL-SYSTEM",
-		"--add-opens",
-		"java.base/java.util=ALL-UNNAMED",
-		"--add-opens",
-		"java.base/java.lang=ALL-UNNAMED",
+		"--add-opens", "java.base/java.util=ALL-UNNAMED",
+		"--add-opens", "java.base/java.lang=ALL-UNNAMED",
 		"-javaagent:" .. home .. "/.local/share/nvim/mason/packages/jdtls/lombok.jar",
-		"-jar",
-		vim.fn.glob(home .. "/.local/share/nvim/mason/packages/jdtls/plugins/org.eclipse.equinox.launcher_*.jar"),
-		"-configuration",
-		home .. "/.local/share/nvim/mason/packages/jdtls/config_" .. "linux",
-		"-data",
-		workspace_dir,
+		"-jar", vim.fn.glob(home .. "/.local/share/nvim/mason/packages/jdtls/plugins/org.eclipse.equinox.launcher_*.jar"),
+		"-configuration", home .. "/.local/share/nvim/mason/packages/jdtls/config_" .. "linux",
+		"-data", workspace_dir,
 	},
 	root_dir = require("jdtls.setup").find_root { ".git", "mvnw", "gradlew", "pom.xml", "build.gradle" },
 	capabilities = capabilities,
@@ -64,17 +58,17 @@ local config = {
 				updateBuildConfiguration = "interactive",
 				runtimes = {
 					{
-						 name = "JavaSE-1.8",
-						 path = "~/.sdkman/candidates/java/8.0.382-tem",
+						name = "JavaSE-1.8",
+						path = "~/.sdkman/candidates/java/8.0.392-librca",
 					},
-					-- {
-					--   name = "JavaSE-11",
-					--   path = "~/.sdkman/candidates/java/11.0.17-tem",
-					-- },
-					-- {
-					--   name = "JavaSE-18",
-					--   path = "~/.sdkman/candidates/java/18.0.2-sem",
-					-- },
+					{
+						name = "JavaSE-11",
+						path = "~/.sdkman/candidates/java/11.0.21-ms",
+					},
+					{
+						name = "JavaSE-17",
+						path = "~/.sdkman/candidates/java/17.0.8-ms",
+					},
 				},
 			},
 			maven = {
@@ -132,21 +126,21 @@ if not status_ok then
 end
 
 local opts = {
-	mode = "n",     -- NORMAL mode
+	mode = "n",  -- NORMAL mode
 	prefix = "<leader>",
-	buffer = nil,   -- Global mappings. Specify a buffer number for buffer local mappings
-	silent = true,  -- use `silent` when creating keymaps
+	buffer = nil, -- Global mappings. Specify a buffer number for buffer local mappings
+	silent = true, -- use `silent` when creating keymaps
 	noremap = true, -- use `noremap` when creating keymaps
-	nowait = true,  -- use `nowait` when creating keymaps
+	nowait = true, -- use `nowait` when creating keymaps
 }
 
 local vopts = {
-	mode = "v",     -- VISUAL mode
+	mode = "v",  -- VISUAL mode
 	prefix = "<leader>",
-	buffer = nil,   -- Global mappings. Specify a buffer number for buffer local mappings
-	silent = true,  -- use `silent` when creating keymaps
+	buffer = nil, -- Global mappings. Specify a buffer number for buffer local mappings
+	silent = true, -- use `silent` when creating keymaps
 	noremap = true, -- use `noremap` when creating keymaps
-	nowait = true,  -- use `nowait` when creating keymaps
+	nowait = true, -- use `nowait` when creating keymaps
 }
 
 local mappings = {
