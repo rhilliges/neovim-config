@@ -10,120 +10,110 @@ if not vim.loop.fs_stat(lazypath) then
 	})
 end
 vim.opt.rtp:prepend(lazypath)
+require("lazy").setup(
+	{
+		-- package manager
+		{
+			'williamboman/mason.nvim'
+			,
+			opts = {
+				registries = {
+					'github:nvim-java/mason-registry',
+					'github:mason-org/mason-registry',
+				}
+			}
+		},
+		{ 'nvim-lua/plenary.nvim' },
+		-- terminal and git
+		{ 'akinsho/toggleterm.nvim',                version = "*", config = true },
+		-- navigation
+		{ 'ThePrimeagen/harpoon',             branch = 'harpoon2' },
+		{ 'nvim-telescope/telescope.nvim',    tag = '0.1.5' },
+		-- lsp
+		{ 'williamboman/mason-lspconfig.nvim' },
+		{ 'neovim/nvim-lspconfig' },
+		-- autocompletion
+		{ 'VonHeikemen/lsp-zero.nvim',        branch = 'v3.x' },
+		{ 'hrsh7th/nvim-cmp' },
+		{ 'hrsh7th/cmp-nvim-lsp' },
+		{ 'hrsh7th/cmp-path' },
+		{ 'hrsh7th/cmp-buffer' },
+		{ 'hrsh7th/cmp-nvim-lua' },
+		{ 'saadparwaiz1/cmp_luasnip' },
+		{ 'L3MON4D3/LuaSnip',                 dependencies = { "rafamadriz/friendly-snippets" }, },
 
-require("lazy").setup({
-	{
-		'nvim-telescope/telescope.nvim',
-		tag = '0.1.2',
-		-- or                              , branch = '0.1.x',
-		dependencies = { 'nvim-lua/plenary.nvim' }
-	},
-	{ 'nvim-telescope/telescope-ui-select.nvim' },
-	{
-		"nvim-telescope/telescope-file-browser.nvim",
-		dependencies = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" }
-	},
-	{ 'akinsho/toggleterm.nvim',                version = "*", config = true },
-	{ 'f-person/git-blame.nvim' },
-	----------------------------------------------------------------------- code parsing
-	{
+
+		-- java
+		{ "mfussenegger/nvim-jdtls" },
+		{ "rcarriga/nvim-dap-ui",             opts = {},                                         dependencies = { "mfussenegger/nvim-dap" } },
+		-- code parsing
 		'nvim-treesitter/nvim-treesitter',
-		dependencies = {
+		{
+			'windwp/nvim-autopairs',
+			event = "InsertEnter",
+			opts = {}
+		},
+		{ 'windwp/nvim-ts-autotag',    opts = {} },
+		{
+			'numToStr/Comment.nvim',
+			lazy = false,
+			opts = {
+				toggler = {
+					---Line-comment toggle keymap
+					line = '<leader>cc',
+					---Block-comment toggle keymap
+					block = '<leader>bc',
+				},
+				---LHS of operator-pending mappings in NORMAL and VISUAL mode
+				opleader = {
+					---Line-comment keymap
+					line = '<leader>c',
+					---Block-comment keymap
+					block = '<leader>c',
+				},
+				---LHS of extra mappings
+				extra = {
+					---Add comment on the line above
+					above = '<leader>cO',
+					---Add comment on the line below
+					below = '<leader>co',
+					---Add comment at the end of line
+					eol = '<leader>cA',
+				},
+			}
+		},
+		{ 'RRethy/vim-illuminate' },
+		{ 'f-person/git-blame.nvim' },
+		-- looks
+		{ 'petertriho/nvim-scrollbar', opts = {} },
+		{ 'nvim-lualine/lualine.nvim' },
+		{
+			"catppuccin/nvim",
+			name = "catppuccin",
+			-- "everblush/nvim",
+			-- name = 'everblush',
+			lazy = false, -- make sure we load this during startup if it is your main colorscheme
+			priority = 1000, -- make sure to load this before all the other start plugins
+			config = function()
+				-- load the colorscheme here
+				vim.cmd([[colorscheme catppuccin-mocha]])
+			end,
+		}
+	}
+)
+
+local function cwd()
+	return vim.loop.cwd()
+end
+require('lualine').setup({
+	sections = {
+		lualine_c = {
 			{
-				'numToStr/Comment.nvim',
-				config = function()
-					require "Comment".setup()
-				end
-			}
-		}
-	},
-	{ 'nvim-treesitter/nvim-treesitter-context' },
-	----------------------------------------------------------------------- lsp
-	{ 'williamboman/mason.nvim' },
-	{ 'williamboman/mason-lspconfig.nvim' },
-	{
-		'VonHeikemen/lsp-zero.nvim',
-		branch = 'v3.x',
-		lazy = true,
-		config = false,
-	},
-	-- LSP Support
-	{
-		'neovim/nvim-lspconfig',
-		dependencies = {
-			{ 'hrsh7th/cmp-nvim-lsp' },
-		}
-	},
-	-- Autocompletion
-	{
-		'hrsh7th/nvim-cmp',
-		dependencies = {
-			{ 'L3MON4D3/LuaSnip' }
-		},
-	},
-	{ 'dnlhc/glance.nvim' },
-	{
-		'folke/trouble.nvim',
-		dependencies = { "nvim-tree/nvim-web-devicons" },
-		opts = {
-			position = 'right',
-			signs = {
-				error = '✘',
-				warning = '▲',
-				hint = '⚑',
-				information = '»'
+				'filename',
+				file_status = true, -- displays file status (readonly status, modified status)
+				path = 1 -- 0 = just filename, 1 = relative path, 2 = absolute path
 			}
 		},
-	},
-	{ 'SmiteshP/nvim-navic' },
-	{ "mfussenegger/nvim-jdtls" },
-	----------------------------------------------------------------------- debugging
-	{ "rcarriga/nvim-dap-ui", dependencies = { "mfussenegger/nvim-dap" } },
-	----------------------------------------------------------------------- file handling
-	{
-		'rhilliges/harpoon',
-		branch = "feature/auto-shift-indices"
-	},
-	{
-		"nvim-tree/nvim-tree.lua",
-		version = "*",
-		lazy = false,
-		dependencies = {
-			"nvim-tree/nvim-web-devicons",
-		},
-	},
-	----------------------------------------------------------------------- user interface
-	{
-		'windwp/nvim-autopairs',
-		event = "InsertEnter",
-		opts = {} -- this is equalent to setup({}) function
-	},
-	{ 'windwp/nvim-ts-autotag' },
-	{ 'RRethy/vim-illuminate' },
-	{ 'petertriho/nvim-scrollbar' },
-	{ 'nvim-lualine/lualine.nvim' },
-	{
-		"folke/which-key.nvim",
-		event = "VeryLazy",
-		init = function()
-			vim.o.timeout = true
-			vim.o.timeoutlen = 300
-		end,
-		opts = {}
-	},
-	----------------------------------------------------------------------- color theme
-	{
-		"catppuccin/nvim",
-		name = "catppuccin",
-		priority = 1000,
-	},
-})
-require("mason").setup({
-    ui = {
-        icons = {
-            package_installed = "✓",
-            package_pending = "➜",
-            package_uninstalled = "✗"
-        }
-    }
+		lualine_x = {cwd}
+	}
 })

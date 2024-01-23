@@ -102,9 +102,8 @@ local config = {
 
 config["on_attach"] = function(client, bufnr)
 	local _, _ = pcall(vim.lsp.codelens.refresh)
-	require("jdtls").setup_dap({ hotcodereplace = "auto" })
-	require("vim.lsp").on_attach(client, bufnr)
-
+	jdtls.setup_dap({ hotcodereplace = "auto" })
+	vim.lsp.on_attach(client, bufnr)
 
 	local status_ok, jdtls_dap = pcall(require, "jdtls.dap")
 	if status_ok then
@@ -120,60 +119,20 @@ vim.api.nvim_create_autocmd({ "BufWritePost" }, {
 })
 jdtls.start_or_attach(config)
 
-local status_ok, which_key = pcall(require, "which-key")
-if not status_ok then
-	return
-end
-
-local opts = {
-	mode = "n",  -- NORMAL mode
-	prefix = "<leader>",
-	buffer = nil, -- Global mappings. Specify a buffer number for buffer local mappings
-	silent = true, -- use `silent` when creating keymaps
-	noremap = true, -- use `noremap` when creating keymaps
-	nowait = true, -- use `nowait` when creating keymaps
-}
-
-local vopts = {
-	mode = "v",  -- VISUAL mode
-	prefix = "<leader>",
-	buffer = nil, -- Global mappings. Specify a buffer number for buffer local mappings
-	silent = true, -- use `silent` when creating keymaps
-	noremap = true, -- use `noremap` when creating keymaps
-	nowait = true, -- use `nowait` when creating keymaps
-}
-
-local mappings = {
-	r = {
-		v = { "<Cmd>lua require('jdtls').extract_variable()<CR>", "extract [v]ariable" },
-		c = { "<Cmd>lua require('jdtls').extract_constant()<CR>", "extract [c]onstant" },
-		-- u = { "<Cmd>JdtUpdateConfig<CR>", "[u]pdate config" },
-	},
-	g = {
-		t = { "<Cmd>lua require'jdtls.tests'.goto_subjects()<CR>", "[t]est" },
-	},
-	d = {
-		t = { function()
-			-- vim.notify('Started debugging session')
-			require 'jdtls'.test_nearest_method()
-		end,
-			"[t]est method" },
-		T = { "<Cmd>lua require'jdtls'.test_class()<CR>", "[T]est class" },
-
-	},
-	f = {
-		o = { "<Cmd>lua require'jdtls'.organize_imports()<CR>", "[o]rganize imports" },
-	}
-}
-
-local vmappings = {
-	r = {
-		v = { "<Esc><Cmd>lua require('jdtls').extract_variable(true)<CR>", "extract [v]ariable" },
-		c = { "<Esc><Cmd>lua require('jdtls').extract_constant(true)<CR>", "extract [c]onstant" },
-		m = { "<Esc><Cmd>lua require('jdtls').extract_method(true)<CR>", "extract [m]ethod" },
-	},
-}
-
-which_key.register(mappings, opts)
-which_key.register(vmappings, vopts)
-which_key.register(vmappings, vopts)
+vim.keymap.set("n", "gt", require"jdtls.tests".goto_subjects)
+vim.keymap.set("n", "<leader>dt", function ()
+	-- vim.notify('Started debugging session')
+	jdtls.test_nearest_method()
+end)
+vim.keymap.set("n", "<leader>rv", jdtls.extract_variable)
+vim.keymap.set("n", "<leader>rV", jdtls.extract_variable_all)
+vim.keymap.set("n", "<leader>rc", jdtls.extract_constant)
+vim.keymap.set("v", "<leader>rv", function ()
+	jdtls.extract_variable(true)
+end)
+vim.keymap.set("v", "<leader>rc", function ()
+	jdtls.extract_constant(true)
+end)
+vim.keymap.set("v", "<leader>rm", function ()
+	jdtls.extract_method(true)
+end)

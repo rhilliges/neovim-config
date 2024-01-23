@@ -1,65 +1,6 @@
-local wk = require 'which-key'
-local h = require("harpoon")
-local hm = require 'harpoon.mark'
-local hu = require 'harpoon.ui'
-h.setup({
-	auto_shift_indices = true,
-    tabline = true,
-    tabline_prefix = "   ",
-    tabline_suffix = "  |",
-})
+local harpoon = require("harpoon")
 
-wk.register({
-    ['<leader>'] = {
-        p = {
-            name = '[p]in',
-            f = { function()
-                hm.toggle_file()
-            end,
-                'toggle [f]ile'
-            },
-        },
-        ['1'] = {
-            function()
-                hu.nav_file(1)
-            end,
-            'first buffer'
-        },
-        ['2'] = {
-            function()
-                hu.nav_file(2)
-            end,
-            'second buffer'
-        },
-        ['3'] = {
-            function()
-                hu.nav_file(3)
-            end,
-            'third buffer'
-        },
-        ['4'] = {
-            function()
-                hu.nav_file(4)
-            end,
-            'fourth buffer'
-        },
-        ['5'] = {
-            function()
-                hu.nav_file(5)
-            end,
-            'fifth buffer'
-        },
-        ['6'] = {
-            function()
-                hu.nav_file(6)
-            end,
-            'sixth buffer'
-        },
-    }
-})
+harpoon:setup()
 
-vim.cmd('highlight! HarpoonInactive guibg=NONE guifg=#63698c')
-vim.cmd('highlight! HarpoonActive guibg=NONE guifg=white')
-vim.cmd('highlight! HarpoonNumberActive guibg=NONE guifg=#7aa2f7')
-vim.cmd('highlight! HarpoonNumberInactive guibg=NONE guifg=#7aa2f7')
-vim.cmd('highlight! TabLineFill guibg=NONE guifg=white')
+vim.keymap.set("n", "<leader>p", function() harpoon:list():append() end)
+vim.keymap.set("n", "<leader>e", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end)
