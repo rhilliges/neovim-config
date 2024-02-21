@@ -32,5 +32,9 @@ vim.keymap.set("n", "<F7>", dap.step_into)
 vim.keymap.set("n", "<F8>", dap.step_out)
 vim.keymap.set("n", "<leader>du", dapui.toggle)
 vim.keymap.set("n", "<leader>dc", function()
-	dapui.float('console')
+	dapui.float_element('console', {
+        width = 150,
+        height = 80,
+        position = 'center'
+    })
 end)
