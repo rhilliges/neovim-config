@@ -86,7 +86,7 @@ require("lazy").setup(
 		{ 'f-person/git-blame.nvim' },
 		-- looks
 		{ 'petertriho/nvim-scrollbar', opts = {} },
-		{ 'nvim-lualine/lualine.nvim' },
+		{ 'nvim-lualine/lualine.nvim', opts = { extensions = { 'nvim-dap-ui' } } },
 		{
 			"catppuccin/nvim",
 			name = "catppuccin",
