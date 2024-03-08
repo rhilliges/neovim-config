@@ -85,6 +85,17 @@ require("lazy").setup(
 		{ 'RRethy/vim-illuminate' },
 		{ 'f-person/git-blame.nvim' },
 		-- looks
+        {
+            "folke/zen-mode.nvim",
+            opts = {
+              tmux = {
+                  enabled = true,
+              },
+              alacritty = {
+                  enabled = true
+              }
+            }
+        },
 		{ 'petertriho/nvim-scrollbar', opts = {} },
 		{ 'nvim-lualine/lualine.nvim', opts = { extensions = { 'nvim-dap-ui' } } },
 		{
@@ -105,6 +116,7 @@ require("lazy").setup(
 local function cwd()
 	return vim.loop.cwd()
 end
+vim.keymap.set("n", "<leader>z", require("zen-mode").toggle)
 require('lualine').setup({
 	sections = {
 		lualine_c = {
