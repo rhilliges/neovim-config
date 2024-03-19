@@ -99,7 +99,7 @@ require("lazy").setup(
             }
         },
 		{ 'petertriho/nvim-scrollbar', opts = {} },
-		{ 'nvim-lualine/lualine.nvim', opts = { extensions = { 'nvim-dap-ui' } } },
+		{ 'nvim-lualine/lualine.nvim' },
 		{
 			"catppuccin/nvim",
 			name = "catppuccin",
@@ -115,9 +115,6 @@ require("lazy").setup(
 	}
 )
 
-local function cwd()
-	return vim.loop.cwd()
-end
 vim.keymap.set("n", "<leader>z", require("zen-mode").toggle)
 local function debugging()
     local status = require'dap'.status()
@@ -127,6 +124,7 @@ local function debugging()
     return ''
 end
 require('lualine').setup({
+    extensions = { 'nvim-dap-ui' },
 	sections = {
 		lualine_c = {
 			{
