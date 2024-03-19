@@ -117,6 +117,13 @@ local function cwd()
 	return vim.loop.cwd()
 end
 vim.keymap.set("n", "<leader>z", require("zen-mode").toggle)
+local function debugging()
+    local status = require'dap'.status()
+    if string.find(status, 'Running') then
+       return ""
+    end
+    return ''
+end
 require('lualine').setup({
 	sections = {
 		lualine_c = {
@@ -124,7 +131,7 @@ require('lualine').setup({
 				'filename',
 				file_status = true, -- displays file status (readonly status, modified status)
 				path = 1 -- 0 = just filename, 1 = relative path, 2 = absolute path
-			}
+			}, {debugging}
 		},
 		lualine_x = {cwd}
 	}
