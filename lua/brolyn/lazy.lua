@@ -88,12 +88,14 @@ require("lazy").setup(
         {
             "folke/zen-mode.nvim",
             opts = {
-              tmux = {
-                  enabled = true,
-              },
-              alacritty = {
-                  enabled = true
-              }
+                plugins = {
+                    tmux = {
+                        enabled = true,
+                    },
+                    alacritty = {
+                        enabled = true
+                    }
+                }
             }
         },
 		{ 'petertriho/nvim-scrollbar', opts = {} },
