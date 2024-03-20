@@ -1,5 +1,7 @@
 local harpoon = require("harpoon")
 
+harpoon.setup()
+
 local function get_color(group, attr)
     return vim.fn.synIDattr(vim.fn.synIDtrans(vim.fn.hlID(group)), attr)
 end
