@@ -45,7 +45,7 @@ require("lazy").setup(
 
 		-- java
 		{ "mfussenegger/nvim-jdtls" },
-		{ "rcarriga/nvim-dap-ui",             opts = {},                                         dependencies = { "mfussenegger/nvim-dap" } },
+		{ "rcarriga/nvim-dap-ui",             opts = {},                                         dependencies = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" } },
 		-- code parsing
 		'nvim-treesitter/nvim-treesitter',
 		{
