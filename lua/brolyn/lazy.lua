@@ -25,7 +25,7 @@ require("lazy").setup(
 		},
 		{ 'nvim-lua/plenary.nvim' },
 		-- terminal and git
-		{ 'akinsho/toggleterm.nvim',                version = "*", config = true },
+        'tpope/vim-fugitive',
 		-- navigation
 		{ 'ThePrimeagen/harpoon',             branch = 'harpoon2' },
 		{ 'nvim-telescope/telescope.nvim',    tag = '0.1.5' },
@@ -41,8 +41,6 @@ require("lazy").setup(
 		{ 'hrsh7th/cmp-nvim-lua' },
 		{ 'saadparwaiz1/cmp_luasnip' },
 		{ 'L3MON4D3/LuaSnip',                 dependencies = { "rafamadriz/friendly-snippets" }, },
-
-
 		-- java
 		{ "mfussenegger/nvim-jdtls" },
 		{ "rcarriga/nvim-dap-ui",             opts = {},                                         dependencies = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" } },
@@ -100,22 +98,21 @@ require("lazy").setup(
         },
 		{ 'petertriho/nvim-scrollbar', opts = {} },
 		{ 'nvim-lualine/lualine.nvim' },
-		{
-			"catppuccin/nvim",
-			name = "catppuccin",
+        {
+            "rose-pine/neovim", name = "rose-pine",
 			-- "everblush/nvim",
 			-- name = 'everblush',
 			lazy = false, -- make sure we load this during startup if it is your main colorscheme
 			priority = 1000, -- make sure to load this before all the other start plugins
 			config = function()
 				-- load the colorscheme here
-                require("catppuccin").setup({
-                    transparent_background = true,
-                    integrations = {
-                        harpoon = true
-                    }
+                require("rose-pine").setup({
+                    variant = "dawn",
+                    styles = {
+                        transparency = true,
+                    },
                 })
-                vim.cmd([[colorscheme catppuccin-mocha]])
+                vim.cmd("colorscheme rose-pine-dawn")
 			end,
 		}
 	}

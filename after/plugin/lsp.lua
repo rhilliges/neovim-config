@@ -20,7 +20,7 @@ end)
 
 require('mason').setup({})
 require('mason-lspconfig').setup({
-	ensure_installed = { 'lua_ls', 'html', 'cssls' },
+	ensure_installed = { 'lua_ls', 'html', 'cssls'},
 	handlers = {
 		lsp_zero.default_setup,
 		jdtls = lsp_zero.noop,
