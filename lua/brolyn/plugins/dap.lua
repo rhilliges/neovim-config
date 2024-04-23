@@ -1,5 +1,5 @@
 return {
-     "mfussenegger/nvim-jdtls",
+    "mfussenegger/nvim-jdtls",
     {
         "rcarriga/nvim-dap-ui",
         opts = {},
@@ -7,15 +7,15 @@ return {
             "mfussenegger/nvim-dap",
             -- "nvim-neotest/nvim-nio"
         },
-        config = function ()
+        config = function()
             local dap = require("dap")
             local dapui = require("dapui")
             vim.fn.sign_define("DapBreakpoint", {
-                  text = "",
-                  texthl = "DiagnosticSignError",
-                  linehl = "",
-                  numhl = "",
-                })
+                text = "",
+                texthl = "DiagnosticSignError",
+                linehl = "",
+                numhl = "",
+            })
 
             dapui.setup({
                 layouts = {
@@ -54,7 +54,6 @@ return {
                     position = 'center'
                 })
             end)
-
         end
     },
 }
