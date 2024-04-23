@@ -35,8 +35,8 @@ return {
         require("mason-lspconfig").setup({
             ensure_installed = {
                 "lua_ls",
-                "rust_analyzer",
-                "gopls",
+                "html",
+                "cssls"
             },
             handlers = {
                 function(server_name) -- default handler (optional)
@@ -82,6 +82,7 @@ return {
                 { name = 'nvim_lsp' },
                 { name = 'luasnip' }, -- For luasnip users.
             }, {
+                { name = 'vim-dadbod-completion' },
                 { name = 'buffer' },
             })
         })

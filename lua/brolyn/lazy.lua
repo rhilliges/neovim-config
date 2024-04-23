@@ -15,7 +15,6 @@ require("lazy").setup({
     spec = "brolyn.plugins",
     change_detection = { notify = false }
 })
-
 --[[ {
     'numToStr/Comment.nvim',
     lazy = false,
