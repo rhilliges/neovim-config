@@ -18,7 +18,17 @@ return {
         "hrsh7th/nvim-cmp",
         "L3MON4D3/LuaSnip",
         "saadparwaiz1/cmp_luasnip",
-        "j-hui/fidget.nvim",
+        {
+            "j-hui/fidget.nvim",
+            opts = {
+                notification = {
+                    window = {
+                        winblend = 0,
+                        align = "top",
+                    },
+                }
+            }
+        }
     },
 
     config = function()
