@@ -19,6 +19,14 @@ return {
         "L3MON4D3/LuaSnip",
         "saadparwaiz1/cmp_luasnip",
         {
+            "dnlhc/glance.nvim", 
+            opts = {
+                border = {
+                    enable = true
+                }
+            }
+        },
+        {
             "j-hui/fidget.nvim",
             opts = {
                 notification = {
@@ -46,7 +54,8 @@ return {
             ensure_installed = {
                 "lua_ls",
                 "html",
-                "cssls"
+                "cssls",
+                "tailwindcss"
             },
             handlers = {
                 function(server_name) -- default handler (optional)
@@ -110,20 +119,24 @@ return {
         })
 
         vim.api.nvim_create_autocmd('LspAttach', {
-            group = vim.api.nvim_create_augroup('kickstart-lsp-attach', { clear = true }),
+            group = vim.api.nvim_create_augroup('brolyn-lsp-attach', { clear = true }),
             callback = function(event)
                 local map = function(keys, func, desc)
                     vim.keymap.set('n', keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
                 end
 
                 map('gd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
-                map('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
+                -- map('gD', '<CMD>Glance definitions<CR>')
+                map('<leader>lr', '<CMD>Glance references<CR>', '[G]oto [R]eferences')
+                -- map('gY', '<CMD>Glance type_definitions<CR>')
+                -- map('gM', '<CMD>Glance implementations<CR>')
+                -- map('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
                 map('gI', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
                 map('<leader>D', require('telescope.builtin').lsp_type_definitions, 'Type [D]efinition')
                 map('<leader>ls', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
                 map('<leader>lS', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
+                map('<leader>la', vim.lsp.buf.code_action, '[L]ist Code [A]ction')
                 map('<F2>', vim.lsp.buf.rename, '[R]e[n]ame')
-                map('<leader>la', vim.lsp.buf.code_action, '[C]ode [A]ction')
                 map('K', vim.lsp.buf.hover, 'Hover Documentation')
                 map('gl', '<cmd>lua vim.diagnostic.open_float()<cr>', 'Show diagnostic')
                 map('[d', '<cmd>lua vim.diagnostic.goto_prev()<cr>', 'Previous diagnostic')
@@ -156,7 +169,7 @@ return {
             group = vim.api.nvim_create_augroup('brolyn-lsp-detach', { clear = true }),
             callback = function(event)
                 vim.lsp.buf.clear_references()
-                vim.api.nvim_clear_autocmds { group = 'kickstart-lsp-highlight', buffer = event.buf }
+                vim.api.nvim_clear_autocmds { group = 'brolyn-lsp-highlight', buffer = event.buf }
             end,
         })
 
