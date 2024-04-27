@@ -44,8 +44,8 @@ vim.api.nvim_create_autocmd(
     {
         pattern = { "*.Jenkinsfile" },
         callback = function()
-            vim.api.nvim_buf_set_option(buf, "filetype", "groovy")
             local buf = vim.api.nvim_get_current_buf()
+            vim.api.nvim_buf_set_option(buf, "filetype", "groovy")
         end,
     }
 )
