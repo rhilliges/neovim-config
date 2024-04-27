@@ -39,3 +39,13 @@ vim.opt.guicursor = {
   'r:hor50-Cursor/lCursor-blinkwait100-blinkon100-blinkoff100'
 }
 
+vim.api.nvim_create_autocmd(
+    "BufEnter",
+    {
+        pattern = { "*.Jenkinsfile" },
+        callback = function()
+            vim.api.nvim_buf_set_option(buf, "filetype", "groovy")
+            local buf = vim.api.nvim_get_current_buf()
+        end,
+    }
+)
