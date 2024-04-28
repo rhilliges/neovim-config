@@ -5,7 +5,7 @@ return {
         opts = {},
         dependencies = {
             "mfussenegger/nvim-dap",
-            -- "nvim-neotest/nvim-nio"
+            "nvim-neotest/nvim-nio"
         },
         config = function()
             local dap = require("dap")
