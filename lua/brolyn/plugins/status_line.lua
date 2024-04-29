@@ -10,6 +10,9 @@ return {
             return ''
         end
         require('lualine').setup({
+            options = {
+                globalstatus = true
+            },
             extensions = { 'nvim-dap-ui' },
             sections = {
                 lualine_c = {
