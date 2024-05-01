@@ -5,7 +5,7 @@ return {
             "williamboman/mason.nvim",
             opts = {
                 registries = {
-                    'github:nvim-java/mason-registry',
+                    -- 'github:nvim-java/mason-registry',
                     'github:mason-org/mason-registry',
                 }
             }
@@ -18,8 +18,9 @@ return {
         "hrsh7th/nvim-cmp",
         "L3MON4D3/LuaSnip",
         "saadparwaiz1/cmp_luasnip",
+        { 'VonHeikemen/lsp-zero.nvim',        branch = 'v3.x' },
         {
-            "dnlhc/glance.nvim", 
+            "dnlhc/glance.nvim",
             opts = {
                 border = {
                     enable = true
@@ -42,6 +43,7 @@ return {
     config = function()
         local cmp = require('cmp')
         local cmp_lsp = require("cmp_nvim_lsp")
+        local lsp_zero = require('lsp-zero')
         local capabilities = vim.tbl_deep_extend(
             "force",
             {},
@@ -58,26 +60,25 @@ return {
                 "tailwindcss"
             },
             handlers = {
-                function(server_name) -- default handler (optional)
-                    require("lspconfig")[server_name].setup {
-                        capabilities = capabilities
-                    }
-                end,
-
-                ["lua_ls"] = function()
-                    local lspconfig = require("lspconfig")
-                    lspconfig.lua_ls.setup {
-                        capabilities = capabilities,
-                        settings = {
-                            Lua = {
-                                runtime = { version = "Lua 5.1" },
-                                diagnostics = {
-                                    globals = { "vim", "it", "describe", "before_each", "after_each" },
+                lsp_zero.default_setup,
+                jdtls = lsp_zero.noop,
+                lua_ls = require('lspconfig').lua_ls.setup({
+                    settings = {
+                        Lua = {
+                            runtime = {
+                                version = 'LuaJIT'
+                            },
+                            diagnostics = {
+                                globals = { 'vim' },
+                            },
+                            workspace = {
+                                library = {
+                                    vim.env.VIMRUNTIME,
                                 }
                             }
                         }
                     }
-                end,
+                })
             }
         })
 
