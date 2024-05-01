@@ -107,12 +107,8 @@ require("lazy").setup(
 			config = function()
 				-- load the colorscheme here
                 require("rose-pine").setup({
-                    variant = "dawn",
-                    styles = {
-                        transparency = true,
-                    },
                 })
-                vim.cmd("colorscheme rose-pine-dawn")
+                vim.cmd("colorscheme rose-pine")
 			end,
 		}
 	}
