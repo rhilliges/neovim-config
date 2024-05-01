@@ -1,5 +1,4 @@
 return {
-    "mfussenegger/nvim-jdtls",
     {
         "rcarriga/nvim-dap-ui",
         opts = {},
