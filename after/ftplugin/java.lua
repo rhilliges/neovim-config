@@ -120,19 +120,60 @@ vim.api.nvim_create_autocmd({ "BufWritePost" }, {
 jdtls.start_or_attach(config)
 
 vim.keymap.set("n", "gt", require"jdtls.tests".goto_subjects)
-vim.keymap.set("n", "<leader>dt", function ()
-	-- vim.notify('Started debugging session')
-	jdtls.test_nearest_method()
+
+vim.keymap.set('n', '<leader>mu', jdtls.update_project_config)
+vim.keymap.set('n', '<leader>mU', jdtls.update_projects_config)
+vim.keymap.set('n', '<leader>mb', function ()
+    jdtls.build_projects()
 end)
-vim.keymap.set("n", "<leader>rv", jdtls.extract_variable)
-vim.keymap.set("n", "<leader>rV", jdtls.extract_variable_all)
-vim.keymap.set("n", "<leader>rc", jdtls.extract_constant)
-vim.keymap.set("v", "<leader>rv", function ()
-	jdtls.extract_variable(true)
+vim.keymap.set('n', '<leader>mc', function ()
+    jdtls.compile()
 end)
-vim.keymap.set("v", "<leader>rc", function ()
-	jdtls.extract_constant(true)
-end)
-vim.keymap.set("v", "<leader>rm", function ()
-	jdtls.extract_method(true)
-end)
+-- vim.keymap.set('n', '<leader>mc', , { desc = '[M]aven [C]ompile' })
+
+vim.keymap.set("n", "<leader>dt",
+    function ()
+        -- vim.notify('Started debugging session')
+        jdtls.test_nearest_method()
+    end
+)
+vim.keymap.set("n", "<leader>ro",
+    function()
+        jdtls.organize_imports()
+    end
+)
+vim.keymap.set("n", "<leader>rv",
+    function()
+        jdtls.extract_variable()
+    end
+)
+vim.keymap.set("n", "<leader>rV",
+    function()
+        jdtls.extract_variable_all()
+    end
+)
+vim.keymap.set("n", "<leader>rc",
+    function()
+        jdtls.extract_constant()
+    end
+)
+vim.keymap.set("v", "<leader>rv",
+    function ()
+        jdtls.extract_variable(true)
+    end
+)
+vim.keymap.set("v", "<leader>rV",
+    function()
+        jdtls.extract_variable_all(true)
+    end
+)
+vim.keymap.set("v", "<leader>rc",
+    function ()
+        jdtls.extract_constant(true)
+    end
+)
+vim.keymap.set("v", "<leader>rm",
+    function ()
+        jdtls.extract_method(true)
+    end
+)
