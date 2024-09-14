@@ -57,7 +57,8 @@ return {
                 "lua_ls",
                 "html",
                 "cssls",
-                "tailwindcss"
+                "tailwindcss",
+                "tsserver"
             },
             handlers = {
                 lsp_zero.default_setup,
