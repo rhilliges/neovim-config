@@ -91,6 +91,12 @@ local config = {
 			format = {
 				enabled = true,
 			},
+            sources = {
+                organizeImports = {
+                    starThreshold = 9999;
+                    staticStarThreshold = 9999;
+                }
+            }
 		},
 		signatureHelp = { enabled = true },
 		extendedClientCapabilities = extendedClientCapabilities,
@@ -101,9 +107,17 @@ local config = {
 }
 
 config["on_attach"] = function(client, bufnr)
-	local _, _ = pcall(vim.lsp.codelens.refresh)
-	jdtls.setup_dap({ hotcodereplace = "auto" })
-	vim.lsp.on_attach(client, bufnr)
+	-- local _, _ = pcall(vim.lsp.codelens.refresh)
+    require'jdtls.setup'.add_commands()
+	jdtls.setup_dap({
+        hotcodereplace = "auto",
+        verbose = true,
+        config_overrides = {
+            args = "--spring.profiles.active=local"
+        }
+    })
+
+	-- vim.lsp.buf_on_attach(client, bufnr)
 
 	local status_ok, jdtls_dap = pcall(require, "jdtls.dap")
 	if status_ok then
@@ -133,8 +147,14 @@ end)
 
 vim.keymap.set("n", "<leader>dt",
     function ()
-        -- vim.notify('Started debugging session')
+        vim.notify('Started debugging test')
         jdtls.test_nearest_method()
+    end
+)
+vim.keymap.set("n", "<leader>dT",
+    function ()
+        vim.notify('Started debugging tests in current class')
+        jdtls.test_class()
     end
 )
 vim.keymap.set("n", "<leader>ro",
