@@ -17,23 +17,17 @@ return {
         "catppuccin/nvim",
         name = "catppuccin",
         priority = 1000,
-        config = function ()
-            require"catppuccin".setup({
-                transparent_background = false,
-                integrations = {
-                    fidget = true
-                }
-            })
-            -- vim.cmd.colorscheme "catppuccin-latte"
-        end
+        opts = {
+            transparent_background = false,
+            integrations = {
+                fidget = true
+            }
+        }
     },
     {
       "folke/tokyonight.nvim",
       lazy = false,
       priority = 1000,
-      config = function()
-        require"tokyonight".setup {}
-        -- vim.cmd.colorscheme "tokyonight"
-      end
+      opts = {}
     }
 }

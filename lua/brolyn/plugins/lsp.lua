@@ -2,15 +2,17 @@ return {
     "neovim/nvim-lspconfig",
     dependencies = {
         {
-            "williamboman/mason.nvim",
-            opts = {
-                registries = {
-                    -- 'github:nvim-java/mason-registry',
-                    'github:mason-org/mason-registry',
+            "williamboman/mason-lspconfig.nvim",
+            dependencies = {
+                "williamboman/mason.nvim",
+                opts = {
+                    registries = {
+                        -- 'github:nvim-java/mason-registry',
+                        'github:mason-org/mason-registry',
+                    }
                 }
-            }
+            },
         },
-        "williamboman/mason-lspconfig.nvim",
         "hrsh7th/cmp-nvim-lsp",
         "hrsh7th/cmp-buffer",
         "hrsh7th/cmp-path",
@@ -18,7 +20,6 @@ return {
         "hrsh7th/nvim-cmp",
         "L3MON4D3/LuaSnip",
         "saadparwaiz1/cmp_luasnip",
-        { 'VonHeikemen/lsp-zero.nvim',        branch = 'v3.x' },
         {
             "dnlhc/glance.nvim",
             opts = {
@@ -43,7 +44,6 @@ return {
     config = function()
         local cmp = require('cmp')
         local cmp_lsp = require("cmp_nvim_lsp")
-        local lsp_zero = require('lsp-zero')
         local capabilities = vim.tbl_deep_extend(
             "force",
             {},
@@ -54,14 +54,15 @@ return {
         require("mason").setup()
         require("mason-lspconfig").setup({
             ensure_installed = {
+                "elixirls",
                 "lua_ls",
                 "html",
+                "gopls",
                 "cssls",
-                "tailwindcss"
+                "tailwindcss",
+                "jdtls"
             },
             handlers = {
-                lsp_zero.default_setup,
-                jdtls = lsp_zero.noop,
                 lua_ls = require('lspconfig').lua_ls.setup({
                     settings = {
                         Lua = {

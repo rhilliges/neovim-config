@@ -1,3 +1,4 @@
+ -- TODO make sure to install jdtls and java-debug-adapter with mason!
 local jdtls = require "jdtls"
 
 local home = os.getenv "HOME"
@@ -6,7 +7,6 @@ local project_name = vim.fn.fnamemodify(vim.fn.getcwd(), ":p:h:t")
 local workspace_dir = workspace_path .. project_name
 
 -- Setup Capabilities
--- local capabilities = vim.lsp.common_capabilities()
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
 local extendedClientCapabilities = jdtls.extendedClientCapabilities
 extendedClientCapabilities.resolveAdditionalTextEditsSupport = true
@@ -23,12 +23,6 @@ vim.list_extend(
 	)
 )
 
--- vim.list_extend(
---     bundles,
--- 	'com.microsoft.java.test.runner-jar-with-dependencies.jar'
--- )
-
--- vim.builtin.dap.active = true
 local config = {
 	cmd = {
 		"java",
@@ -46,7 +40,7 @@ local config = {
 		"-configuration", home .. "/.local/share/nvim/mason/packages/jdtls/config_" .. "linux",
 		"-data", workspace_dir,
 	},
-	root_dir = require("jdtls.setup").find_root { ".git", "mvnw", "gradlew", "pom.xml", "build.gradle" },
+	root_dir = require("jdtls.setup").find_root { ".git", "pom.xml" },
 	capabilities = capabilities,
 
 	settings = {
@@ -123,6 +117,70 @@ config["on_attach"] = function(client, bufnr)
 	if status_ok then
 		jdtls_dap.setup_dap_main_class_configs()
 	end
+
+    vim.keymap.set("n", "gt", require"jdtls.tests".goto_subjects)
+
+    vim.keymap.set('n', '<leader>mu', jdtls.update_project_config)
+    vim.keymap.set('n', '<leader>mU', jdtls.update_projects_config)
+    vim.keymap.set('n', '<leader>mb', function ()
+        jdtls.build_projects()
+    end)
+    vim.keymap.set('n', '<leader>mc', function ()
+        jdtls.compile()
+    end)
+
+    vim.keymap.set("n", "<leader>dt",
+        function ()
+            vim.notify('Started debugging test')
+            jdtls.test_nearest_method()
+        end
+    )
+    vim.keymap.set("n", "<leader>dT",
+        function ()
+            vim.notify('Started debugging tests in current class')
+            jdtls.test_class()
+        end
+    )
+    vim.keymap.set("n", "<leader>ro",
+        function()
+            jdtls.organize_imports()
+        end
+    )
+    vim.keymap.set("n", "<leader>rv",
+        function()
+            jdtls.extract_variable()
+        end
+    )
+    vim.keymap.set("n", "<leader>rV",
+        function()
+            jdtls.extract_variable_all()
+        end
+    )
+    vim.keymap.set("n", "<leader>rc",
+        function()
+            jdtls.extract_constant()
+        end
+    )
+    vim.keymap.set("v", "<leader>rv",
+        function ()
+            jdtls.extract_variable(true)
+        end
+    )
+    vim.keymap.set("v", "<leader>rV",
+        function()
+            jdtls.extract_variable_all(true)
+        end
+    )
+    vim.keymap.set("v", "<leader>rc",
+        function ()
+            jdtls.extract_constant(true)
+        end
+    )
+    vim.keymap.set("v", "<leader>rm",
+        function ()
+            jdtls.extract_method(true)
+        end
+    )
 end
 
 vim.api.nvim_create_autocmd({ "BufWritePost" }, {
@@ -133,67 +191,3 @@ vim.api.nvim_create_autocmd({ "BufWritePost" }, {
 })
 jdtls.start_or_attach(config)
 
-vim.keymap.set("n", "gt", require"jdtls.tests".goto_subjects)
-
-vim.keymap.set('n', '<leader>mu', jdtls.update_project_config)
-vim.keymap.set('n', '<leader>mU', jdtls.update_projects_config)
-vim.keymap.set('n', '<leader>mb', function ()
-    jdtls.build_projects()
-end)
-vim.keymap.set('n', '<leader>mc', function ()
-    jdtls.compile()
-end)
--- vim.keymap.set('n', '<leader>mc', , { desc = '[M]aven [C]ompile' })
-
-vim.keymap.set("n", "<leader>dt",
-    function ()
-        vim.notify('Started debugging test')
-        jdtls.test_nearest_method()
-    end
-)
-vim.keymap.set("n", "<leader>dT",
-    function ()
-        vim.notify('Started debugging tests in current class')
-        jdtls.test_class()
-    end
-)
-vim.keymap.set("n", "<leader>ro",
-    function()
-        jdtls.organize_imports()
-    end
-)
-vim.keymap.set("n", "<leader>rv",
-    function()
-        jdtls.extract_variable()
-    end
-)
-vim.keymap.set("n", "<leader>rV",
-    function()
-        jdtls.extract_variable_all()
-    end
-)
-vim.keymap.set("n", "<leader>rc",
-    function()
-        jdtls.extract_constant()
-    end
-)
-vim.keymap.set("v", "<leader>rv",
-    function ()
-        jdtls.extract_variable(true)
-    end
-)
-vim.keymap.set("v", "<leader>rV",
-    function()
-        jdtls.extract_variable_all(true)
-    end
-)
-vim.keymap.set("v", "<leader>rc",
-    function ()
-        jdtls.extract_constant(true)
-    end
-)
-vim.keymap.set("v", "<leader>rm",
-    function ()
-        jdtls.extract_method(true)
-    end
-)
