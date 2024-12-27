@@ -33,9 +33,14 @@
       -- do as well as how to actually do it!
 
       require('telescope').setup {
+		defaults = vim.tbl_extend(
+			"force",
+			require('telescope.themes').get_ivy(), -- or get_cursor, get_ivy
+			{}
+		),
         extensions = {
           ['ui-select'] = {
-            require('telescope.themes').get_dropdown(),
+            require('telescope.themes').get_cursor(),
           },
         },
       }
