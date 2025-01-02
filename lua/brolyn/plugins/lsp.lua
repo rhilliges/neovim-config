@@ -42,6 +42,7 @@ return {
     },
 
     config = function()
+        local lspconfig = require('lspconfig')
         local cmp = require('cmp')
         local cmp_lsp = require("cmp_nvim_lsp")
         local capabilities = vim.tbl_deep_extend(
@@ -54,16 +55,16 @@ return {
         require("mason").setup()
         require("mason-lspconfig").setup({
             ensure_installed = {
-                "elixirls",
+                "nextls",
+                -- "elixirls",
                 "lua_ls",
                 "html",
-                "gopls",
                 "cssls",
                 "tailwindcss",
                 "jdtls"
             },
             handlers = {
-                lua_ls = require('lspconfig').lua_ls.setup({
+                lua_ls = lspconfig.lua_ls.setup({
                     settings = {
                         Lua = {
                             runtime = {
@@ -79,7 +80,10 @@ return {
                             }
                         }
                     }
-                })
+                }),
+                nextls = function ()
+                    lspconfig.nextls.setup({})
+                end
             }
         })
 
