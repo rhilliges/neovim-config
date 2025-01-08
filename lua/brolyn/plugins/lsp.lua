@@ -55,8 +55,6 @@ return {
         require("mason").setup()
         require("mason-lspconfig").setup({
             ensure_installed = {
-                "nextls",
-                -- "elixirls",
                 "lua_ls",
                 "html",
                 "cssls",
@@ -64,25 +62,39 @@ return {
                 "jdtls"
             },
             handlers = {
-                lua_ls = lspconfig.lua_ls.setup({
-                    settings = {
-                        Lua = {
-                            runtime = {
-                                version = 'LuaJIT'
-                            },
-                            diagnostics = {
-                                globals = { 'vim' },
-                            },
-                            workspace = {
-                                library = {
-                                    vim.env.VIMRUNTIME,
+                function (server_name) -- default handler (optional)
+                    print("Setting up LSP: " .. server_name)
+                    require("lspconfig")[server_name].setup {}
+                end,
+                jdtls = function ()
+                    print "Skipping setup of jdtls"
+                end,
+                lua_ls = function()
+                        lspconfig.lua_ls.setup({
+                            settings = {
+                                Lua = {
+                                    runtime = {
+                                        version = 'LuaJIT'
+                                    },
+                                    diagnostics = {
+                                        globals = { 'vim' },
+                                    },
+                                    workspace = {
+                                        library = {
+                                            vim.env.VIMRUNTIME,
+                                        }
+                                    }
                                 }
                             }
-                        }
-                    }
-                }),
-                nextls = function ()
-                    lspconfig.nextls.setup({})
+                        })
+                end,
+                elixirls = function ()
+                    print("Setting up LSP: elixirls")
+                    lspconfig.elixirls.setup({
+                        cmd = { "elixir-ls" },
+                        -- set default capabilities for cmp lsp completion source
+                        capabilities = capabilities,
+                    })
                 end
             }
         })
