@@ -39,6 +39,10 @@ vim.o.timeoutlen = 300
 vim.o.splitright = true
 vim.o.splitbelow = true
 
+vim.o.tabstop = 4
+vim.o.softtabstop = 4
+vim.o.shiftwidth = 4
+
 vim.o.list = true
 vim.opt.listchars = {
 	-- tab = "» ",
@@ -294,7 +298,13 @@ require("lazy").setup({
 			-- do as well as how to actually do it!
 			-- [[ Configure Telescope ]]
 			-- See `:help telescope` and `:help telescope.setup()`
+
 			require("telescope").setup({
+				defaults = vim.tbl_extend(
+					"force",
+					require("telescope.themes").get_ivy(), -- or get_cursor, get_ivy
+					{}
+				),
 				extensions = {
 					["ui-select"] = {
 						require("telescope.themes").get_dropdown(),
@@ -318,6 +328,8 @@ require("lazy").setup({
 			vim.keymap.set("n", "<leader>sr", builtin.resume, { desc = "[S]earch [R]esume" })
 			vim.keymap.set("n", "<leader>s.", builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
 			vim.keymap.set("n", "<leader><leader>", builtin.buffers, { desc = "[ ] Find existing buffers" })
+			vim.keymap.set("n", "<leader>sb", builtin.git_branches)
+			vim.keymap.set("n", "<leader>sc", builtin.git_commits)
 
 			-- Slightly advanced example of overriding default behavior and theme
 			vim.keymap.set("n", "<leader>/", function()
@@ -410,7 +422,7 @@ require("lazy").setup({
 					-- map('grn', vim.lsp.buf.rename, '[R]e[n]ame')
 					map("<F2>", vim.lsp.buf.rename, "[R]e[n]ame")
 					map("<leader>lr", "<CMD>Glance references<CR>", "[G]oto [R]eferences")
-					-- map("gd", telescope.lsp_definitions, "[G]oto [D]efinition")
+					map("gd", telescope.lsp_definitions, "[G]oto [D]efinition")
 					map("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
 					map("gI", telescope.lsp_implementations, "[G]oto [I]mplementation")
 					map("<leader>la", vim.lsp.buf.code_action, "[L]ist Code [A]ction")
@@ -833,12 +845,11 @@ require("lazy").setup({
 							{ id = "watches", size = 0.25 },
 						},
 						size = 30,
-						position = "right", -- Can be "left" or "right"
-					},
+						position = "left", -- Can be "left" or "right"
+					}
 				},
 			})
 
-			local dap_opt = { position = "center", width = 120 }
 			vim.keymap.set("n", "<leader>db", dap.toggle_breakpoint)
 			vim.keymap.set("n", "<F5>", dap.continue)
 			vim.keymap.set("n", "<F6>", dap.step_over)
@@ -852,9 +863,6 @@ require("lazy").setup({
 					position = "center",
 				})
 			end)
-			dap.listeners.after.event_initialized["dapui_config"] = dapui.open
-			dap.listeners.before.event_terminated["dapui_config"] = dapui.close
-			dap.listeners.before.event_exited["dapui_config"] = dapui.close
 		end,
 	},
 	-- database
@@ -885,12 +893,9 @@ require("lazy").setup({
 				if ok then
 					mod.close()
 				end
-
 				vim.cmd.Git()
+				vim.cmd('wincmd o')
 			end)
-			local builtin = require("telescope.builtin")
-			vim.keymap.set("n", "<leader>sb", builtin.git_branches)
-			vim.keymap.set("n", "<leader>sc", builtin.git_commits)
 		end,
 	},
 	"f-person/git-blame.nvim",
