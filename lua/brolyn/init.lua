@@ -665,12 +665,12 @@ require("lazy").setup({
 					-- `friendly-snippets` contains a variety of premade snippets.
 					--    See the README about individual language/framework/plugin snippets:
 					--    https://github.com/rafamadriz/friendly-snippets
-					-- {
-					--   'rafamadriz/friendly-snippets',
-					--   config = function()
-					--     require('luasnip.loaders.from_vscode').lazy_load()
-					--   end,
-					-- },
+					{
+					  'rafamadriz/friendly-snippets',
+					  config = function()
+					    require('luasnip.loaders.from_vscode').lazy_load()
+					  end,
+					},
 				},
 				opts = {},
 			},
@@ -759,7 +759,7 @@ require("lazy").setup({
 					transparency = true,
 				},
 			})
-			vim.cmd.colorscheme("rose-pine")
+			vim.cmd.colorscheme("rose-pine-dawn")
 		end,
 	},
 	{
@@ -846,7 +846,7 @@ require("lazy").setup({
 						},
 						size = 30,
 						position = "left", -- Can be "left" or "right"
-					}
+					},
 				},
 			})
 
@@ -889,12 +889,16 @@ require("lazy").setup({
 		"tpope/vim-fugitive",
 		config = function()
 			vim.keymap.set("n", "<leader>gs", function()
-				local ok, mod = pcall(require, "dapui")
+				local ok, dapui = pcall(require, "dapui")
 				if ok then
-					mod.close()
+					dapui.close()
 				end
+        -- local ok, ai = pcall(require, "avante")
+        -- if ok then
+        --   ai.close()
+        -- end
 				vim.cmd.Git()
-				vim.cmd('wincmd o')
+				vim.cmd("wincmd o")
 			end)
 		end,
 	},
@@ -940,6 +944,13 @@ require("lazy").setup({
 	},
 	--utilities
 	{ "RRethy/vim-illuminate" },
+  {
+    'windwp/nvim-autopairs',
+    event = "InsertEnter",
+    config = true
+    -- use opts = {} for passing setup options
+    -- this is equivalent to setup({}) function
+  },
 	{ "windwp/nvim-ts-autotag", opts = {} },
 	{ "petertriho/nvim-scrollbar", opts = {} },
 	{
@@ -966,6 +977,55 @@ require("lazy").setup({
 			},
 		},
 	},
+	{
+		"nvim-lualine/lualine.nvim",
+		dependencies = { "nvim-tree/nvim-web-devicons" },
+		config = function()
+			local function debugging()
+				local status = require("dap").status()
+				if string.find(status, "Running") then
+					return ""
+				end
+				return ""
+			end
+			require("lualine").setup({
+				options = {
+					globalstatus = true,
+				},
+				extensions = { "nvim-dap-ui" },
+				sections = {
+					lualine_c = {
+						{
+							"filename",
+							file_status = true, -- displays file status (readonly status, modified status)
+							path = 1, -- 0 = just filename, 1 = relative path, 2 = absolute path
+						},
+						{ debugging },
+					},
+					lualine_x = { cwd },
+				},
+			})
+		end,
+	},
+	{
+		"stevearc/oil.nvim",
+		---@module 'oil'
+		---@type oil.SetupOpts
+		opts = {},
+    keys = {
+      { "<leader>n", "<cmd>Oil<cr>", desc = "NeoTree" },
+    },
+		-- Optional dependencies
+		dependencies = {
+			{
+				"echasnovski/mini.icons",
+				opts = {},
+			},
+		},
+		-- dependencies = { "nvim-tree/nvim-web-devicons" }, -- use if you prefer nvim-web-devicons
+		-- Lazy loading is not recommended because it is very tricky to make it work correctly in all situations.
+		lazy = false,
+	},
 	{ -- Collection of various small independent plugins/modules
 		"echasnovski/mini.nvim",
 		dependencies = {
@@ -990,36 +1050,6 @@ require("lazy").setup({
 			-- - sr)'  - [S]urround [R]eplace [)] [']
 			require("mini.surround").setup()
 
-			-- Simple and easy statusline.
-			--  You could remove this setup call if you don't like it,
-			--  and try some other statusline plugin
-			local statusline = require("mini.statusline")
-			-- set use_icons to true if you have a Nerd Font
-			statusline.setup({ use_icons = vim.g.have_nerd_font })
-
-			-- You can configure sections in the statusline by overriding their
-			-- default behavior. For example, here we set the section for
-			-- cursor location to LINE:COLUMN
-			---@diagnostic disable-next-line: duplicate-set-field
-			statusline.section_location = function()
-				return "%2l:%-2v"
-			end
-
-			require("mini.files").setup({
-				windows = {
-					-- Maximum number of windows to show side by side
-					max_number = math.huge,
-					-- Whether to show preview of file/directory under cursor
-					preview = true,
-					-- Width of focused window
-					width_focus = 30,
-					-- Width of non-focused window
-					width_nofocus = 30,
-					-- Width of preview window
-					width_preview = 30,
-				},
-			})
-			vim.keymap.set("n", "<leader>n", MiniFiles.open)
 		end,
 	},
 	require("brolyn.plugins.ai"),
