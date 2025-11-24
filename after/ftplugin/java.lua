@@ -68,6 +68,10 @@ local config = {
 						name = "JavaSE-17",
 						path = "~/.sdkman/candidates/java/17.0.8-ms",
 					},
+					{
+						name = "JavaSE-21",
+						path = "~/.sdkman/candidates/java/21.0.8-tem",
+					},
 				},
 			},
 			maven = {
@@ -107,19 +111,25 @@ local config = {
 
 config["on_attach"] = function(client, bufnr)
 	local _, _ = pcall(vim.lsp.codelens.refresh)
-	jdtls.setup_dap({
+	-- jdtls.setup_dap({
+	-- 	hotcodereplace = "auto",
+	-- 	verbose = true,
+	-- 	config_overrides = {
+	-- 		args = "--spring.profiles.active=local",
+	-- 	},
+	-- })
+
+	-- vim.lsp.buf_on_attach(client, bufnr)
+
+	local status_ok, jdtls_dap = pcall(require, "jdtls.dap")
+	if status_ok then
+		jdtls_dap.setup_dap_main_class_configs({
 		hotcodereplace = "auto",
 		verbose = true,
 		config_overrides = {
 			args = "--spring.profiles.active=local",
 		},
 	})
-
-	-- vim.lsp.buf_on_attach(client, bufnr)
-
-	local status_ok, jdtls_dap = pcall(require, "jdtls.dap")
-	if status_ok then
-		jdtls_dap.setup_dap_main_class_configs()
 	end
 
 	vim.keymap.set("n", "gt", require("jdtls.tests").goto_subjects)

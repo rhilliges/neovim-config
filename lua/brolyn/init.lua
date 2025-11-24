@@ -5,6 +5,8 @@ vim.g.have_nerd_font = true
 vim.o.number = true
 vim.o.relativenumber = true
 
+vim.o.winborder = "rounded"
+
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.o.mouse = "a"
 
@@ -97,7 +99,7 @@ vim.keymap.set("n", "<C-l>", "<C-w><C-l>", { desc = "Move focus to the right win
 vim.keymap.set("n", "<C-j>", "<C-w><C-j>", { desc = "Move focus to the lower window" })
 vim.keymap.set("n", "<C-k>", "<C-w><C-k>", { desc = "Move focus to the upper window" })
 
-vim.keymap.set("n", "<leader>w", ":w<CR>")
+vim.keymap.set("n", "<leader>w", ":wa<CR>:lua print 'Saved all files'<CR>")
 vim.keymap.set("n", "<A-k>", ":m .-2<CR>==")
 vim.keymap.set("n", "<A-j>", ":m .+1<CR>==")
 vim.keymap.set("n", "p", '"0p')
@@ -260,6 +262,20 @@ require("lazy").setup({
 			end)
 		end,
 	},
+  {
+  "folke/snacks.nvim",
+  ---@type snacks.Config
+    opts = {
+      input = {
+        win = {
+          style = "input",
+          relative = "cursor",
+          row = -3,
+          col = 0,
+        }
+      }
+    }
+  },
 	{ -- Fuzzy Finder (files, lsp, etc)
 		"nvim-telescope/telescope.nvim",
 		event = "VimEnter",
@@ -371,8 +387,6 @@ require("lazy").setup({
 		-- Main LSP Configuration
 		"neovim/nvim-lspconfig",
 		dependencies = {
-			-- Automatically install LSPs and related tools to stdpath for Neovim
-			-- Mason must be loaded before its dependents so we need to set it up here.
 			{ "mason-org/mason.nvim", opts = {} },
 			"mason-org/mason-lspconfig.nvim",
 			"WhoIsSethDaniel/mason-tool-installer.nvim",
@@ -400,26 +414,12 @@ require("lazy").setup({
 			vim.api.nvim_create_autocmd("LspAttach", {
 				group = vim.api.nvim_create_augroup("kickstart-lsp-attach", { clear = true }),
 				callback = function(event)
-					-- NOTE: Remember that Lua is a real programming language, and as such it is possible
-					-- to define small helper and utility functions so you don't have to repeat yourself.
-					--
-					-- In this case, we create a function that lets us more easily define mappings specific
-					-- for LSP related items. It sets the mode, buffer and description for us each time.
 					local map = function(keys, func, desc, mode)
 						mode = mode or "n"
 						vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
 					end
 
 					local telescope = require("telescope.builtin")
-					-- map('grr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
-					-- map('gri', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
-					-- map('gra', vim.lsp.buf.code_action, '[G]oto Code [A]ction', { 'n', 'x' })
-					-- map('grd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
-					-- map('grD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
-					-- map('gO', require('telescope.builtin').lsp_document_symbols, 'Open Document Symbols')
-					-- map('gW', require('telescope.builtin').lsp_dynamic_workspace_symbols, 'Open Workspace Symbols')
-					-- map('grt', require('telescope.builtin').lsp_type_definitions, '[G]oto [T]ype Definition')
-					-- map('grn', vim.lsp.buf.rename, '[R]e[n]ame')
 					map("<F2>", vim.lsp.buf.rename, "[R]e[n]ame")
 					map("<leader>lr", "<CMD>Glance references<CR>", "[G]oto [R]eferences")
 					map("gd", telescope.lsp_definitions, "[G]oto [D]efinition")
@@ -430,20 +430,6 @@ require("lazy").setup({
 					map("<leader>lS", telescope.lsp_dynamic_workspace_symbols, "[W]orkspace [S]ymbols")
 					map("<leader>lt", telescope.lsp_type_definitions, "Type [D]efinition")
 
-					-- map('gD', '<CMD>Glance definitions<CR>')
-					-- map('gY', '<CMD>Glance type_definitions<CR>')
-					-- map('gM', '<CMD>Glance implementations<CR>')
-					-- map('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
-					-- map('[d', vim.diagnostic.goto_prev, 'Previous diagnostic')
-					-- map(']d', vim.diagnostic.goto_next, 'Next diagnostic')
-					-- map('K', vim.lsp.buf.hover, 'Hover Documentation')
-					-- map('gl', vim.diagnostic.open_float, 'Show diagnostic')
-
-					-- This function resolves a difference between neovim nightly (version 0.11) and stable (version 0.10)
-					---@param client vim.lsp.Client
-					---@param method vim.lsp.protocol.Method
-					---@param bufnr? integer some lsp support methods only in specific files
-					---@return boolean
 					local function client_supports_method(client, method, bufnr)
 						if vim.fn.has("nvim-0.11") == 1 then
 							return client:supports_method(method, bufnr)
@@ -507,6 +493,13 @@ require("lazy").setup({
 			-- Diagnostic Config
 			-- See :help vim.diagnostic.Opts
 			vim.diagnostic.config({
+				-- Use the default configuration
+				-- virtual_lines = true
+				-- Alternatively, customize specific options
+				virtual_lines = {
+					-- Only show virtual line diagnostics for the current cursor line
+					current_line = true,
+				},
 				severity_sort = true,
 				float = { border = "rounded", source = "if_many" },
 				underline = { severity = vim.diagnostic.severity.ERROR },
@@ -543,13 +536,6 @@ require("lazy").setup({
 			--  - settings (table): Override the default settings passed when initializing the server.
 			--        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
 			local servers = {
-				-- Some languages (like typescript) have entire language plugins that can be useful:
-				--    https://github.com/pmizio/typescript-tools.nvim
-				--
-				-- But for many setups, the LSP (`ts_ls`) will work just fine
-				ts_ls = {},
-				--
-
 				lua_ls = {
 					-- cmd = { ... },
 					-- filetypes = { ... },
@@ -582,20 +568,25 @@ require("lazy").setup({
 			local ensure_installed = vim.tbl_keys(servers or {})
 			vim.list_extend(ensure_installed, {
 				"stylua", -- Used to format Lua code
+				"ts_ls",
+				"html-lsp",
+				"tailwindcss",
+				"cssls",
 			})
 			require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
 
 			require("mason-lspconfig").setup({
 				ensure_installed = {}, -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)
 				automatic_installation = false,
+				automatic_enable = ensure_installed,
 				handlers = {
 					function(server_name)
-						local server = servers[server_name] or {}
+						local server = servers or {}
 						-- This handles overriding only values explicitly passed
 						-- by the server configuration above. Useful when disabling
 						-- certain features of an LSP (for example, turning off formatting for ts_ls)
 						server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
-						require("lspconfig")[server_name].setup(server)
+						vim.lsp.enable(server)
 					end,
 				},
 			})
@@ -666,10 +657,10 @@ require("lazy").setup({
 					--    See the README about individual language/framework/plugin snippets:
 					--    https://github.com/rafamadriz/friendly-snippets
 					{
-					  'rafamadriz/friendly-snippets',
-					  config = function()
-					    require('luasnip.loaders.from_vscode').lazy_load()
-					  end,
+						"rafamadriz/friendly-snippets",
+						config = function()
+							require("luasnip.loaders.from_vscode").lazy_load()
+						end,
 					},
 				},
 				opts = {},
@@ -814,6 +805,16 @@ require("lazy").setup({
 		"mfussenegger/nvim-dap",
 		opts = {},
 		dependencies = {
+			-- {
+			-- 	"igorlfs/nvim-dap-view",
+			-- 	---@module 'dap-view'
+			-- 	---@type dapview.Config
+			-- 	opts = {
+			--        windows = {
+			--          position = "right",
+			--        }
+			--      },
+			-- },
 			"rcarriga/nvim-dap-ui",
 			"nvim-neotest/nvim-nio",
 		},
@@ -856,6 +857,8 @@ require("lazy").setup({
 			vim.keymap.set("n", "<F7>", dap.step_into)
 			vim.keymap.set("n", "<F8>", dap.step_out)
 			vim.keymap.set("n", "<leader>du", dapui.toggle)
+			-- vim.keymap.set("n", "<leader>do", "<CMD>DapViewOpen<CR>")
+			-- vim.keymap.set("n", "<leader>dc", "<CMD>DapViewClose<CR>")
 			vim.keymap.set("n", "<leader>dc", function()
 				dapui.float_element("console", {
 					width = 150,
@@ -889,14 +892,14 @@ require("lazy").setup({
 		"tpope/vim-fugitive",
 		config = function()
 			vim.keymap.set("n", "<leader>gs", function()
-				local ok, dapui = pcall(require, "dapui")
-				if ok then
-					dapui.close()
-				end
-        -- local ok, ai = pcall(require, "avante")
-        -- if ok then
-        --   ai.close()
-        -- end
+				-- local ok, dapui = pcall(require, "dapui")
+				-- if ok then
+				-- 	dapui.close()
+				-- end
+				-- local ok, ai = pcall(require, "avante")
+				-- if ok then
+				--   ai.close()
+				-- end
 				vim.cmd.Git()
 				vim.cmd("wincmd o")
 			end)
@@ -944,13 +947,13 @@ require("lazy").setup({
 	},
 	--utilities
 	{ "RRethy/vim-illuminate" },
-  {
-    'windwp/nvim-autopairs',
-    event = "InsertEnter",
-    config = true
-    -- use opts = {} for passing setup options
-    -- this is equivalent to setup({}) function
-  },
+	{
+		"windwp/nvim-autopairs",
+		event = "InsertEnter",
+		config = true,
+		-- use opts = {} for passing setup options
+		-- this is equivalent to setup({}) function
+	},
 	{ "windwp/nvim-ts-autotag", opts = {} },
 	{ "petertriho/nvim-scrollbar", opts = {} },
 	{
@@ -1012,9 +1015,9 @@ require("lazy").setup({
 		---@module 'oil'
 		---@type oil.SetupOpts
 		opts = {},
-    keys = {
-      { "<leader>n", "<cmd>Oil<cr>", desc = "NeoTree" },
-    },
+		keys = {
+			{ "<leader>n", "<cmd>Oil<cr>", desc = "NeoTree" },
+		},
 		-- Optional dependencies
 		dependencies = {
 			{
@@ -1049,7 +1052,6 @@ require("lazy").setup({
 			-- - sd'   - [S]urround [D]elete [']quotes
 			-- - sr)'  - [S]urround [R]eplace [)] [']
 			require("mini.surround").setup()
-
 		end,
 	},
 	require("brolyn.plugins.ai"),
