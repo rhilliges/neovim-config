@@ -7,7 +7,19 @@ local project_name = vim.fn.fnamemodify(vim.fn.getcwd(), ":p:h:t")
 local workspace_dir = workspace_path .. project_name
 
 -- Setup Capabilities
-local capabilities = require("blink.cmp").get_lsp_capabilities()
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities = vim.tbl_deep_extend("force", capabilities, require("blink.cmp").get_lsp_capabilities())
+
+-- Ensure completion capabilities are properly set
+capabilities.textDocument.completion.completionItem.snippetSupport = true
+capabilities.textDocument.completion.completionItem.resolveSupport = {
+	properties = {
+		'documentation',
+		'detail',
+		'additionalTextEdits',
+	}
+}
+
 local extendedClientCapabilities = jdtls.extendedClientCapabilities
 extendedClientCapabilities.resolveAdditionalTextEditsSupport = true
 
@@ -146,10 +158,6 @@ config["on_attach"] = function(client, bufnr)
 	vim.keymap.set("n", "<leader>dt", function()
 		vim.notify("Started debugging test")
 		jdtls.test_nearest_method()
-	end)
-	vim.keymap.set("n", "<leader>dp", function()
-		vim.notify("Started debugging previous test")
-		require("dap").run_last()
 	end)
 	vim.keymap.set("n", "<leader>dT", function()
 		vim.notify("Started debugging tests in current class")
