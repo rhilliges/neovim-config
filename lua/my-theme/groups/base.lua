@@ -3,7 +3,7 @@
 local function base(p)
   return {
     -- Editor UI
-    Normal = { fg = p.fg0, bg = p.bg3 },
+    Normal = { fg = p.fg0, bg = 'NONE' },
     NormalNC = { fg = p.fg0, bg = p.bg2 },
     NormalFloat = { fg = p.fg0, bg = p.bg0 },
     FloatBorder = { fg = p.fg3, bg = p.bg0 },

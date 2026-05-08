@@ -93,7 +93,7 @@ vim.g.mapleader = " "
 vim.g.maplocalleader =" "
 vim.g.have_nerd_font = true
 
-o.background = "light"
+o.background = "dark"
 
 vim.cmd.colorscheme('my-theme')
 

@@ -4,10 +4,8 @@ vim.pack.add({
 	"https://github.com/nvim-lua/plenary.nvim",
 	"https://github.com/nvim-tree/nvim-web-devicons",
 	"https://github.com/nvim-neotest/nvim-nio",
-
 	-- dependency management
 	"https://github.com/mason-org/mason.nvim",
-
 	-- editor (navigation, highlighting, formatting)
 	"https://github.com/nvim-telescope/telescope.nvim",
 	"https://github.com/dnlhc/glance.nvim",
@@ -18,40 +16,33 @@ vim.pack.add({
 	"https://github.com/nvim-treesitter/nvim-treesitter",
 	"https://github.com/stevearc/conform.nvim",
     "https://github.com/laytan/cloak.nvim",
-
 	-- git
 	"https://github.com/tpope/vim-fugitive",
 	"https://github.com/f-person/git-blame.nvim",
 	"https://github.com/lewis6991/gitsigns.nvim",
-
 	-- database
 	"https://github.com/tpope/vim-dotenv",
 	"https://github.com/tpope/vim-dadbod",
 	"https://github.com/kristijanhusak/vim-dadbod-ui",
 	"https://github.com/kristijanhusak/vim-dadbod-completion",
-
 	-- lsp
 	"https://github.com/rafamadriz/friendly-snippets",
 	"https://github.com/saghen/blink.cmp",
 	"https://github.com/mfussenegger/nvim-jdtls",
 	"https://github.com/RRethy/vim-illuminate",
-
 	-- debugging
 	"https://github.com/mfussenegger/nvim-dap",
 	"https://github.com/igorlfs/nvim-dap-view",
-
 	-- http
 	"https://github.com/mistweaverco/kulala.nvim",
-
 	-- ui
 	"https://github.com/nvim-lualine/lualine.nvim",
 	"https://github.com/folke/snacks.nvim",
-
     -- writing
     "https://github.com/chomosuke/typst-preview.nvim",
-
     --golang
     "https://github.com/crispgm/nvim-go",
+    "https://github.com/leoluz/nvim-dap-go"
 })
 
 require("lualine").setup({
@@ -278,3 +269,4 @@ require('go').setup({
     -- show test result with popup window
     test_popup = true,
 })
+require('dap-go').setup()
