@@ -15,7 +15,7 @@ vim.pack.add({
 	"https://github.com/stevearc/oil.nvim",
 	"https://github.com/nvim-treesitter/nvim-treesitter",
 	"https://github.com/stevearc/conform.nvim",
-    "https://github.com/laytan/cloak.nvim",
+	"https://github.com/laytan/cloak.nvim",
 	-- git
 	"https://github.com/tpope/vim-fugitive",
 	"https://github.com/f-person/git-blame.nvim",
@@ -27,6 +27,7 @@ vim.pack.add({
 	"https://github.com/kristijanhusak/vim-dadbod-completion",
 	-- lsp
 	"https://github.com/rafamadriz/friendly-snippets",
+	"https://github.com/saghen/blink.lib",
 	"https://github.com/saghen/blink.cmp",
 	"https://github.com/mfussenegger/nvim-jdtls",
 	"https://github.com/RRethy/vim-illuminate",
@@ -38,12 +39,14 @@ vim.pack.add({
 	-- ui
 	"https://github.com/nvim-lualine/lualine.nvim",
 	"https://github.com/folke/snacks.nvim",
-    -- writing
-    "https://github.com/chomosuke/typst-preview.nvim",
-    --golang
-    "https://github.com/crispgm/nvim-go",
-    "https://github.com/leoluz/nvim-dap-go"
+	-- writing
+	"https://github.com/chomosuke/typst-preview.nvim",
+	--golang
+	"https://github.com/crispgm/nvim-go",
+	"https://github.com/leoluz/nvim-dap-go",
 })
+
+require("cloak").setup()
 
 require("lualine").setup({
 	options = {
@@ -231,14 +234,14 @@ vim.lsp.enable({
 	"intelephense",
 	"html_ls",
 	"gopls",
-    "tinymist",
+	"tinymist",
 })
 
 require("dap-view").setup({
-    winbar = {
-        sections = { "console", "watches", "scopes", "exceptions", "breakpoints", "threads", "repl" },
-        default_section = "console",
-    }
+	winbar = {
+		sections = { "console", "watches", "scopes", "exceptions", "breakpoints", "threads", "repl" },
+		default_section = "console",
+	},
 })
 
 vim.fn.sign_define("DapBreakpoint", {
@@ -261,12 +264,18 @@ kulala.setup({
 	default_env = "local",
 	winbar = true,
 	default_win_bar_panes = { "body", "headers", "headers_body", "script_output", "stats" },
+	additional_curl_options = {
+		"--insecure",
+	},
+	require("kulala").setup({
+		insecure = true,
+	}),
 })
 
-require 'typst-preview'.setup {}
+require("typst-preview").setup({})
 
-require('go').setup({
-    -- show test result with popup window
-    test_popup = true,
+require("go").setup({
+	-- show test result with popup window
+	test_popup = true,
 })
-require('dap-go').setup()
+require("dap-go").setup()
