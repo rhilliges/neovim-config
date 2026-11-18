@@ -1,3 +1,6 @@
+local rocks_path = vim.fn.expand("~/.luarocks/share/lua/5.1/")
+package.path = package.path .. ";" .. rocks_path .. "?.lua;" .. rocks_path .. "?/init.lua"
+
 vim.cmd("packadd nvim.undotree")
 vim.pack.add({
 	-- base
@@ -35,7 +38,8 @@ vim.pack.add({
 	"https://github.com/mfussenegger/nvim-dap",
 	"https://github.com/igorlfs/nvim-dap-view",
 	-- http
-	"https://github.com/mistweaverco/kulala.nvim",
+	"https://github.com/j-hui/fidget.nvim",
+	"https://github.com/rest-nvim/rest.nvim",
 	-- ui
 	"https://github.com/nvim-lualine/lualine.nvim",
 	"https://github.com/folke/snacks.nvim",
@@ -191,7 +195,6 @@ require("nvim-treesitter").setup({
 		"markdown_inline",
 		"query",
 		"http",
-		"kulala_http",
 		"vim",
 		"vimdoc",
 		"php",
@@ -257,20 +260,11 @@ vim.filetype.add({
 	},
 })
 
-local kulala = require("kulala")
-kulala.setup({
-	debug = true,
-	default_view = "headers_body",
-	default_env = "local",
-	winbar = true,
-	default_win_bar_panes = { "body", "headers", "headers_body", "script_output", "stats" },
-	additional_curl_options = {
-		"--insecure",
+vim.g.rest_nvim = {
+	request = {
+		skip_ssl_verification = true,
 	},
-	require("kulala").setup({
-		insecure = true,
-	}),
-})
+}
 
 require("typst-preview").setup({})
 
