@@ -1,6 +1,11 @@
 local M = {}
 local state = { command = { "opencode" } }
 
+local function session_cache_path(directory)
+	directory = vim.uv.fs_realpath(directory) or directory
+	return vim.fn.stdpath("state") .. "/opencode-sessions/" .. vim.fn.sha256(directory)
+end
+
 local function set_file_staged(staged)
 	local explorer = require("codediff.ui.lifecycle").get_panel_view(vim.api.nvim_get_current_tabpage())
 	if not explorer or not explorer.tree then
@@ -67,11 +72,39 @@ local function show_agent(mode)
 			vim.notify("Workspace: executable not found: " .. state.command[1], vim.log.levels.WARN)
 			return
 		end
+		local command = vim.deepcopy(state.command)
+		local path = vim.fn.stdpath("config") .. "/agent-instructions.md"
+		local instructions = table.concat(vim.fn.readfile(path), "\n")
+		local directory = vim.uv.fs_realpath(state.cwd) or state.cwd
+		local cache_path = session_cache_path(directory)
+		local cached = vim.fn.filereadable(cache_path) == 1 and vim.fn.readfile(cache_path)[1] or nil
+		local result = vim.system({
+			"opencode", "api", "post", "/api/session", "--data",
+			vim.json.encode({ id = cached, location = { directory = directory } }),
+		}, { text = true, cwd = state.cwd, timeout = 10000 }):wait()
+		local ok, response = pcall(vim.json.decode, result.stdout or "")
+		local session = ok and type(response) == "table" and response.data and response.data.id
+		if result.code ~= 0 or not session then
+			vim.notify("Workspace: could not create or reattach OpenCode session", vim.log.levels.ERROR)
+			return
+		end
+		vim.fn.mkdir(vim.fn.fnamemodify(cache_path, ":h"), "p", 448)
+		vim.fn.writefile({ session }, cache_path)
+		result = vim.system({
+			"opencode", "api", "put",
+			"/api/experimental/session/" .. session .. "/instructions/entries/nvim",
+			"--data", vim.json.encode({ value = instructions }),
+		}, { text = true, cwd = state.cwd, timeout = 10000 }):wait()
+		if result.code ~= 0 then
+			vim.notify("Workspace: could not load OpenCode instructions", vim.log.levels.ERROR)
+			return
+		end
+		vim.list_extend(command, { "--session", session })
 		state.buf = vim.api.nvim_create_buf(false, true)
 		vim.bo[state.buf].bufhidden = "hide"
 		vim.b[state.buf].opencode_terminal = true
 		vim.api.nvim_buf_call(state.buf, function()
-			state.job = vim.fn.jobstart(state.command, { term = true, cwd = state.cwd })
+			state.job = vim.fn.jobstart(command, { term = true, cwd = state.cwd })
 		end)
 		if state.job <= 0 then
 			vim.notify("Workspace: could not start OpenCode", vim.log.levels.ERROR)
@@ -120,6 +153,26 @@ function M.toggle_agent(mode)
 	show_agent(mode)
 end
 
+function M.reset_agent()
+	local mode = state.mode or "overlay"
+	local cache_path = session_cache_path(state.cwd or vim.fn.getcwd())
+	if vim.fn.filereadable(cache_path) == 1 and vim.fn.delete(cache_path) ~= 0 then
+		vim.notify("Workspace: could not clear OpenCode session cache", vim.log.levels.ERROR)
+		return
+	end
+	hide_agent()
+	if state.job and vim.fn.jobwait({ state.job }, 0)[1] == -1 then
+		vim.fn.jobstop(state.job)
+	end
+	if state.buf and vim.api.nvim_buf_is_valid(state.buf) then
+		vim.api.nvim_buf_delete(state.buf, { force = true })
+	end
+	state.buf = nil
+	state.job = nil
+	state.diff_split = false
+	show_agent(mode)
+end
+
 function M.open_diff()
 	local split = state.mode == "split" and state.win and vim.api.nvim_win_is_valid(state.win)
 	hide_agent()
@@ -152,6 +205,7 @@ function M.setup(opts)
 		{ "<leader>aa", "<M-a>", "toggle_agent", "Toggle agent overlay", "overlay" },
 		{ "<leader>as", "<M-s>", "toggle_agent", "Toggle agent top split", "split" },
 		{ "<leader>af", "<M-f>", "toggle_agent", "Toggle agent tab", "tab" },
+		{ "<leader>ar", "<M-r>", "reset_agent", "Reset agent session" },
 	}) do
 		vim.keymap.set("n", mapping[1], function()
 			M[mapping[3]](mapping[5])
