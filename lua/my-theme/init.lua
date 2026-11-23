@@ -1,9 +1,9 @@
 local M = {}
 
-function M.load()
+function M.load(name, colors)
   vim.cmd('hi clear')
   vim.o.termguicolors = true
-  vim.g.colors_name = 'my-theme'
+  vim.g.colors_name = name or 'my-theme'
 
   -- Clear cached modules so palette/groups pick up the new background
   for key in pairs(package.loaded) do
@@ -13,7 +13,7 @@ function M.load()
   end
 
   local palette = require('my-theme.palette')
-  local p = palette(vim.o.background)
+  local p = colors or palette(vim.o.background)
 
   local groups = vim.tbl_extend(
     'force',

@@ -95,7 +95,7 @@ vim.g.have_nerd_font = true
 
 o.background = "dark"
 
-vim.cmd.colorscheme('my-theme')
+vim.cmd.colorscheme('winter-forest')
 
 -- Experimental UI2: floating cmdline and messages
 o.cmdheight = 0
