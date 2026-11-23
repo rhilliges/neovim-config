@@ -58,45 +58,14 @@ map("n", "<leader>e", function()
 	harpoon.ui:toggle_quick_menu(harpoon:list())
 end)
 
-map("n", "<leader>1", function()
-	harpoon:list():select(1)
-end)
-
-map("n", "<leader>2", function()
-	harpoon:list():select(2)
-end)
-
-map("n", "<leader>3", function()
-	harpoon:list():select(3)
-end)
-
-map("n", "<leader>4", function()
-	harpoon:list():select(4)
-end)
-
-map("n", "<leader>5", function()
-	harpoon:list():select(5)
-end)
-
-map("n", "<leader>6", function()
-	harpoon:list():select(6)
-end)
-
-map("n", "<leader>7", function()
-	harpoon:list():select(7)
-end)
-
-map("n", "<leader>8", function()
-	harpoon:list():select(8)
-end)
-
-map("n", "<leader>9", function()
-	harpoon:list():select(9)
-end)
-
-map("n", "<leader>0", function()
-	harpoon:list():select(0)
-end)
+for number = 1, 10 do
+	map("n", "<leader>" .. (number % 10), function()
+		local tab = vim.api.nvim_list_tabpages()[number]
+		if tab then
+			vim.api.nvim_set_current_tabpage(tab)
+		end
+	end, { desc = "Go to tab " .. number })
+end
 
 map("n", "<leader>f", function()
 	require("conform").format({ async = true, lsp_format = "fallback" })
@@ -106,6 +75,13 @@ map("n", "<leader>gs", function()
 	vim.cmd.Git()
 	vim.cmd("wincmd o")
 end)
+
+map("n", "<leader>tn", "<cmd>tabnew<CR>", { desc = "New empty tab" })
+map("n", "<leader>tc", "<cmd>tabclose<CR>", { desc = "Close current tab" })
+map("t", "<M-n>", "<C-\\><C-n><cmd>tabnext<CR>", { desc = "Next tab" })
+map("t", "<M-p>", "<C-\\><C-n><cmd>tabprevious<CR>", { desc = "Previous tab" })
+map("t", "<M-t>", "<C-\\><C-n><cmd>tabnew<CR>", { desc = "New empty tab" })
+map("t", "<M-x>", "<C-\\><C-n><cmd>tabclose<CR>", { desc = "Close current tab" })
 
 local dap = require("dap")
 map("n", "<leader>dp", function()
@@ -136,3 +112,5 @@ map("n", "<leader>rp", function()
 	vim.fn.search("^###", "bW")
 end)
 map("n", "<leader>re", "<CMD>Rest env select<CR>")
+
+require("config.workspace").setup()

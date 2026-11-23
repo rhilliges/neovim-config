@@ -23,6 +23,7 @@ vim.pack.add({
 	"https://github.com/tpope/vim-fugitive",
 	"https://github.com/f-person/git-blame.nvim",
 	"https://github.com/lewis6991/gitsigns.nvim",
+	"https://github.com/esmuellert/codediff.nvim",
 	-- database
 	"https://github.com/tpope/vim-dotenv",
 	"https://github.com/tpope/vim-dadbod",
@@ -116,43 +117,47 @@ pcall(require("telescope").load_extension, "ui-select")
 require("oil").setup()
 
 local harpoon = require("harpoon")
-harpoon:setup()
+local select_file = require("harpoon.config").get_default_config().default.select
+harpoon:setup({
+	default = {
+		select = function(item, list, options)
+			if item then
+				local buf = vim.fn.bufnr(item.value)
+				local win = buf ~= -1 and vim.fn.win_findbuf(buf)[1]
+				if win then
+					vim.api.nvim_set_current_win(win)
+				elseif buf == -1 then
+					options = vim.tbl_extend("keep", options or {}, { tabedit = true })
+				end
+			end
+			select_file(item, list, options)
+		end,
+	},
+})
 
 local function get_color(group, attr)
 	return vim.fn.synIDattr(vim.fn.synIDtrans(vim.fn.hlID(group)), attr)
 end
 
-local function shorten_filenames(filenames)
-	local shortened = {}
-
-	local counts = {}
-	for _, file in ipairs(filenames) do
-		local name = vim.fn.fnamemodify(file.value, ":t")
-		counts[name] = (counts[name] or 0) + 1
-	end
-
-	for _, file in ipairs(filenames) do
-		local name = vim.fn.fnamemodify(file.value, ":t")
-
-		if counts[name] == 1 then
-			table.insert(shortened, { filename = vim.fn.fnamemodify(name, ":t") })
-		else
-			table.insert(shortened, { filename = file.value })
-		end
-	end
-	return shortened
-end
-
 function _G.tabline()
-	local tabline = "  "
-	local tabs = shorten_filenames(harpoon:list().items)
-	-- print(vim.inspect(tabs))
-	for i, tab in ipairs(tabs) do
-		tabline = tabline .. "%#HarpoonNumberInactive#" .. i .. " %*" .. "%#HarpoonInactive#"
-
-		tabline = tabline .. tab.filename .. " | %*"
+	local tabs = {}
+	local current = vim.api.nvim_get_current_tabpage()
+	for number, tab in ipairs(vim.api.nvim_list_tabpages()) do
+		local buf = vim.api.nvim_win_get_buf(vim.api.nvim_tabpage_get_win(tab))
+		local label
+		if vim.b[buf].opencode_terminal then
+			label = "opencode"
+		elseif vim.t[tab].codediff_view then
+			label = "CodeDiff"
+		else
+			label = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(buf), ":t")
+			label = label ~= "" and label or "[No Name]"
+		end
+		local highlight = tab == current and "%#TabLineSel#" or "%#TabLine#"
+		tabs[#tabs + 1] = highlight .. "%" .. number .. "T " .. number .. " " .. label:gsub("%%", "%%%%") .. " %T"
 	end
-	return tabline
+	local close = #tabs > 1 and "%999X X " or ""
+	return table.concat(tabs) .. "%#TabLineFill#%T%=" .. close
 end
 
 vim.o.tabline = "%!v:lua.tabline()"
