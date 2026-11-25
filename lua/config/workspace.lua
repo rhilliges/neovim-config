@@ -6,23 +6,6 @@ local function session_cache_path(directory)
 	return vim.fn.stdpath("state") .. "/opencode-sessions/" .. vim.fn.sha256(directory)
 end
 
-local function set_file_staged(staged)
-	local explorer = require("codediff.ui.lifecycle").get_panel_view(vim.api.nvim_get_current_tabpage())
-	if not explorer or not explorer.tree then
-		return
-	end
-	local node = explorer.tree:get_node()
-	local data = node and node.data
-	if not data or not data.path or data.type == "directory" or data.type == "group" then
-		return
-	end
-	local can_stage = data.group == "unstaged" or data.group == "conflicts"
-	local can_unstage = data.group == "staged"
-	if (staged and can_stage) or (not staged and can_unstage) then
-		require("codediff.ui.explorer").toggle_stage_entry(explorer, explorer.tree)
-	end
-end
-
 local function hide_agent()
 	local tab = vim.api.nvim_get_current_tabpage()
 	local agent_tab = state.mode == "tab"
@@ -64,7 +47,7 @@ local function window_config(mode)
 	}
 end
 
-local function show_agent(mode)
+local function show_agent(mode, use_current_window)
 	hide_agent()
 	state.cwd = state.cwd or vim.fn.getcwd()
 	if not state.buf or not vim.api.nvim_buf_is_valid(state.buf) or vim.fn.jobwait({ state.job }, 0)[1] ~= -1 then
@@ -113,14 +96,16 @@ local function show_agent(mode)
 	end
 	state.return_win = vim.api.nvim_get_current_win()
 	if mode == "tab" then
-		vim.cmd.tabnew()
+		if not use_current_window then
+			vim.cmd.tabnew()
+		end
 		state.win = vim.api.nvim_get_current_win()
 		vim.api.nvim_win_set_buf(state.win, state.buf)
 	else
 		state.win = vim.api.nvim_open_win(state.buf, true, window_config(mode))
 	end
 	state.mode = mode
-	vim.wo[state.win].winbar = " OpenCode "
+	vim.wo[state.win].winbar = ""
 	vim.wo[state.win].scrollbind = false
 	vim.wo[state.win].list = false
 	vim.wo[state.win].number = false
@@ -132,7 +117,6 @@ end
 
 function M.toggle_agent(mode)
 	mode = mode or "overlay"
-	state.diff_split = false
 	local visible = state.win and vim.api.nvim_win_is_valid(state.win)
 	local same_tab = visible and vim.api.nvim_win_get_tabpage(state.win) == vim.api.nvim_get_current_tabpage()
 	if visible and state.mode == "tab" and mode == "tab" and not same_tab then
@@ -169,39 +153,12 @@ function M.reset_agent()
 	end
 	state.buf = nil
 	state.job = nil
-	state.diff_split = false
 	show_agent(mode)
-end
-
-function M.open_diff()
-	local split = state.mode == "split" and state.win and vim.api.nvim_win_is_valid(state.win)
-	hide_agent()
-	vim.cmd.stopinsert()
-	state.restore_split = false
-	state.cwd = state.cwd or vim.fn.getcwd()
-	if state.diff_tab and vim.api.nvim_tabpage_is_valid(state.diff_tab) then
-		vim.api.nvim_set_current_tabpage(state.diff_tab)
-		if split then
-			show_agent("split")
-			vim.cmd.stopinsert()
-			vim.api.nvim_set_current_win(state.return_win)
-		end
-		return
-	end
-	state.diff_split = split
-	local ok, err = pcall(vim.cmd, "CodeDiff --repo " .. vim.fn.fnameescape(state.cwd))
-	if not ok then
-		vim.notify("Workspace: " .. tostring(err), vim.log.levels.WARN)
-	end
-	if split then
-		show_agent("split")
-	end
 end
 
 function M.setup(opts)
 	state.command = (opts or {}).command or state.command
 	for _, mapping in ipairs({
-		{ "<leader>gd", "<M-d>", "open_diff", "Open CodeDiff" },
 		{ "<leader>aa", "<M-a>", "toggle_agent", "Toggle agent overlay", "overlay" },
 		{ "<leader>as", "<M-s>", "toggle_agent", "Toggle agent top split", "split" },
 		{ "<leader>af", "<M-f>", "toggle_agent", "Toggle agent tab", "tab" },
@@ -214,72 +171,11 @@ function M.setup(opts)
 		local action = "<C-\\><C-n><Cmd>lua require('config.workspace')." .. mapping[3] .. "(" .. argument .. ")<CR>"
 		vim.keymap.set("t", mapping[2], action, { desc = mapping[4] })
 	end
-	require("codediff").setup({ keymaps = { view = { focus_explorer = "<leader>ge", toggle_stage = false } } })
 	local group = vim.api.nvim_create_augroup("AgentWorkspace", { clear = true })
 	vim.api.nvim_create_autocmd({ "WinEnter", "BufEnter", "TermEnter" }, {
 		group = group,
 		callback = function()
 			vim.cmd.redrawtabline()
-		end,
-	})
-	vim.api.nvim_create_autocmd("User", {
-		group = group,
-		pattern = "CodeDiffClose",
-		callback = function(event)
-			local tab = event.data.tabpage
-			if vim.api.nvim_tabpage_is_valid(tab) then
-				vim.t[tab].codediff_view = nil
-			end
-			if state.diff_tab == tab then
-				state.diff_tab = nil
-			end
-			vim.cmd.redrawtabline()
-		end,
-	})
-	vim.api.nvim_create_autocmd("FileType", {
-		group = group,
-		pattern = "codediff-explorer",
-		callback = function(event)
-			vim.keymap.set("n", "s", function()
-				set_file_staged(true)
-			end, { buffer = event.buf, desc = "Stage selected file" })
-			vim.keymap.set("n", "u", function()
-				set_file_staged(false)
-			end, { buffer = event.buf, desc = "Unstage selected file" })
-		end,
-	})
-	vim.api.nvim_create_autocmd("User", {
-		group = group,
-		pattern = "CodeDiffOpen",
-		callback = function(event)
-			vim.t[event.data.tabpage].codediff_view = true
-			vim.cmd.redrawtabline()
-			if event.data.mode ~= "explorer" then
-				return
-			end
-			local tab = event.data.tabpage
-			state.diff_tab = tab
-			vim.schedule(function()
-				if not vim.api.nvim_tabpage_is_valid(tab) then
-					return
-				end
-				if state.diff_split then
-					hide_agent()
-					vim.api.nvim_set_current_tabpage(tab)
-					show_agent("split")
-					vim.cmd.stopinsert()
-					vim.api.nvim_set_current_win(state.return_win)
-				end
-				state.diff_split = false
-				if state.startup_tab and vim.api.nvim_tabpage_is_valid(state.startup_tab) then
-					local windows = vim.api.nvim_tabpage_list_wins(state.startup_tab)
-					local buf = #windows == 1 and vim.api.nvim_win_get_buf(windows[1])
-					if buf == state.startup_buf and not vim.bo[buf].modified then
-						pcall(vim.cmd, vim.api.nvim_tabpage_get_number(state.startup_tab) .. "tabclose")
-					end
-				end
-				state.startup_tab = nil
-			end)
 		end,
 	})
 	vim.api.nvim_create_autocmd("VimResized", {
@@ -310,15 +206,7 @@ function M.setup(opts)
 				if not untouched or vim.bo.buftype ~= "" then
 					return
 				end
-				state.startup_tab = vim.api.nvim_get_current_tabpage()
-				state.startup_buf = vim.api.nvim_get_current_buf()
-				vim.api.nvim_buf_set_lines(0, 0, -1, false, {
-					"CodeDiff appears here when this repository has changes.",
-					"Press <Space>gd to open it again after making changes.",
-				})
-				vim.bo.modified = false
-				show_agent("split")
-				M.open_diff()
+				show_agent("tab", true)
 			end)
 		end,
 	})

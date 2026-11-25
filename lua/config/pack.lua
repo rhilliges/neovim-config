@@ -23,7 +23,6 @@ vim.pack.add({
 	"https://github.com/tpope/vim-fugitive",
 	"https://github.com/f-person/git-blame.nvim",
 	"https://github.com/lewis6991/gitsigns.nvim",
-	"https://github.com/esmuellert/codediff.nvim",
 	-- database
 	"https://github.com/tpope/vim-dotenv",
 	"https://github.com/tpope/vim-dadbod",
@@ -146,9 +145,9 @@ function _G.tabline()
 		local buf = vim.api.nvim_win_get_buf(vim.api.nvim_tabpage_get_win(tab))
 		local label
 		if vim.b[buf].opencode_terminal then
-			label = "opencode"
-		elseif vim.t[tab].codediff_view then
-			label = "CodeDiff"
+			label = "Opencode"
+		elseif vim.bo[buf].filetype == "fugitive" then
+			label = "Git"
 		else
 			label = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(buf), ":t")
 			label = label ~= "" and label or "[No Name]"

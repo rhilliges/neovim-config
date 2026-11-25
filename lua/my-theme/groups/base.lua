@@ -31,6 +31,7 @@ local function base(p)
     ColorColumn = { bg = p.bg4 },
     VertSplit = { fg = p.bg4 },
     WinSeparator = { fg = p.bg4 },
+    WinSeparatorActive = { fg = p.accent },
 
     StatusLine = { fg = p.fg1, bg = p.bg1 },
     StatusLineNC = { fg = p.fg3, bg = p.bg1 },
